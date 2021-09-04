@@ -5,7 +5,7 @@ defmodule Archinyl.Schema.Collection do
 
   alias Archinyl.Schema.Collection
 
-  @parameters [:library, :name]
+  @parameters [:library_id, :name]
 
   schema "collection" do
     field :name, :string, [null: :false]
@@ -17,6 +17,7 @@ defmodule Archinyl.Schema.Collection do
     collection
     |> cast(params, @parameters)
     |> validate_required(@parameters)
+    |> foreign_key_constraint(:library_id)
   end
 
 end

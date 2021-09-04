@@ -5,15 +5,16 @@ defmodule Archinyl.Schema.Library do
 
   alias Archinyl.Schema.User
 
-  @parameters [:library]
+  @parameters [:user_id]
 
   schema "library" do
-    belongs_to :users, User
+    belongs_to :user, User
   end
 
   def changeset(library, params \\ %{}) do
     library
     |> cast(params, @parameters)
     |> validate_required(@parameters)
+    |> foreign_key_constraint(:user_id)
   end
 end

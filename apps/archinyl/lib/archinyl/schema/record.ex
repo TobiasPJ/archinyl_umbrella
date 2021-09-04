@@ -5,7 +5,7 @@ defmodule Archinyl.Schema.Record do
 
   alias Archinyl.Schema.Artist
 
-  @parameters [:title, :artist]
+  @parameters [:title, :artist_id]
 
   schema "record" do
     field :title, :string
@@ -17,5 +17,6 @@ defmodule Archinyl.Schema.Record do
     record
     |> cast(params, @parameters)
     |> validate_required(@parameters)
+    |> foreign_key_constraint(:artist_id)
   end
 end

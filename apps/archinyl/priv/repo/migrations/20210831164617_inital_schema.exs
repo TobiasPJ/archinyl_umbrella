@@ -3,7 +3,8 @@ defmodule Archinyl.Repo.Migrations.InitalSchema do
 
   def change do
     create_query = "CREATE TYPE gender AS ENUM ('female', 'male', 'other')"
-    execute(create_query)
+    drop_query = "DROP TYPE gender"
+    execute(create_query, drop_query)
 
     create table(:users) do
       add :full_name, :string, null: :false
@@ -15,11 +16,11 @@ defmodule Archinyl.Repo.Migrations.InitalSchema do
     end
 
     create table(:library) do
-      add :user, references(:users), null: :false
+      add :user_id, references(:users), null: :false
     end
 
     create table(:collection) do
-      add :library, references(:library), null: :false
+      add :library_id, references(:library), null: :false
       add :name, :string, null: :false
     end
 
@@ -31,7 +32,7 @@ defmodule Archinyl.Repo.Migrations.InitalSchema do
 
     create table(:record) do
       add :title, :string, null: :false
-      add :artist, references(:artist), null: :false
+      add :artist_id, references(:artist), null: :false
     end
 
     create table(:records_in_collection) do
@@ -40,10 +41,10 @@ defmodule Archinyl.Repo.Migrations.InitalSchema do
     end
 
     create table(:song) do
-      add :on_record, references(:record), null: :false
+      add :record_id, references(:record), null: :false
       add :title, :string, null: :false
       add :runtime, :time, null: :false
-      add :artist, references(:artist), null: :false
+      add :artist_id, references(:artist), null: :false
     end
 
     create unique_index(:artist, [:name, :birthday], name: :unique_artist)
