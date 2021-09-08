@@ -26,23 +26,49 @@ module.exports = (env, options) => {
     },
     devtool: devMode ? 'eval-cheap-module-source-map' : undefined,
     module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader'
-          }
-        },
-        {
-          test: /\.[s]?css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader',
-          ],
+      rules: [{
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
         }
-      ]
+      },
+      {
+        test: /\.[s]?css$/,
+        use: [{
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              removeCR: true,
+              sourceMap: devMode // resolve-url-loader needs source maps from previous loaders, but should not output one itself
+            }
+          },
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'fonts/',
+            esModule: false
+          }
+        }]
+      }
+    ]
     },
     plugins: [
       new MiniCssExtractPlugin({ filename: '../css/app.css' }),
