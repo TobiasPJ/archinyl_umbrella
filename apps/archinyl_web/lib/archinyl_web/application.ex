@@ -11,8 +11,6 @@ defmodule ArchinylWeb.Application do
       ArchinylWeb.Telemetry,
       # Start the Endpoint (http/https)
       ArchinylWeb.Endpoint
-      # Start a worker by calling: ArchinylWeb.Worker.start_link(arg)
-      # {ArchinylWeb.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

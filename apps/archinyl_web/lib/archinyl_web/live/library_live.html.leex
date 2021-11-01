@@ -1,0 +1,40 @@
+<%=if assigns[:user_id] do%>
+<div class="columns">
+<div class="column is-one-fifth">
+<aside class="menu">
+<p class="menu-label">
+    General
+  </p>
+  <ul class="menu-list">
+    <li><a>Collection</a></li>
+  </ul>
+</aside>
+</div>
+<div class="column is-four-fifths">
+<div class="columns is-multiline">
+<%= for collection <- @collections do%>
+<div class="column is-one-quarter">
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <%=collection.name %>
+    </p>
+  </header>
+</div>
+</div>
+<%end %>
+</div>
+</div>
+</div>
+<%else %>
+<div class="container">
+<article class="message is-danger">
+  <div class="message-header">
+    <p>Danger</p>
+  </div>
+  <div class="message-body">
+  You are not logged in please log in to see your collections
+  </div>
+</article>
+</div>
+<%end %>

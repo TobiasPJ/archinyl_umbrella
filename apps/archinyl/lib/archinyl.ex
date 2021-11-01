@@ -1,59 +1,8 @@
 defmodule Archinyl do
-  import Bcrypt.Base
-  alias Archinyl.Schema.User
-  alias Archinyl.Schema.Library
   alias Archinyl.Schema.Collection
   alias Archinyl.Schema.Artist
   alias Archinyl.Schema.Record
   alias Archinyl.Schema.Song
-
-  @salt "$2b$12$4BJUL0QXzfg2U/7n5j2ZPO"
-
-  def register(%User{
-        full_name: full_name,
-        username: username,
-        email: email,
-        password: password
-      }) do
-    case Archinyl.Repo.get_user(email) do
-      nil ->
-        password = hash_password(password, @salt)
-
-        {:ok, %User{id: id}} =
-          Archinyl.Repo.insert_user(%User{
-            full_name: full_name,
-            username: username,
-            email: email,
-            password: password
-          })
-
-        Archinyl.Repo.insert_library(%Library{user_id: id})
-
-        {:ok, id}
-
-      _ ->
-        {:error, "An account with email #{email} already exists"}
-    end
-  end
-
-  def login(email, password) do
-    case Archinyl.Repo.get_user(email) do
-      nil ->
-        {:error, "No user with given email"}
-
-      %User{id: id, password: user_password} ->
-        password = hash_password(password, @salt)
-
-        case user_password do
-          ^password ->
-            %Library{id: library_id} = Archinyl.Repo.get_library(id)
-            {:ok, library_id}
-
-          _ ->
-            {:error, "Wrong password"}
-        end
-    end
-  end
 
   def create_collection(library, name) do
     case Archinyl.Repo.insert_collection(%Collection{library_id: library, name: name}) do

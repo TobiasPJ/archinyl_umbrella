@@ -49,7 +49,8 @@ defmodule ArchinylWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:archinyl, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:cowboy, "~> 2.7.0"}
     ]
   end
 
