@@ -94,16 +94,18 @@ defmodule Archinyl.Repo do
     |> all()
   end
 
-  def get_collection(library_id, name) do
+  def get_collections(library_id, search_term) do
+    term = "%#{String.downcase(search_term)}%"
+
     Collection
-    |> where([c], c.library_id == ^library_id and c.name == ^name)
-    |> one()
+    |> where([c], c.library_id == ^library_id and fragment("like(lower(?), ?)", c.name, ^term))
+    |> all()
   end
 
-  def get_records_in_collection(collection_id) do
-    records_in_collection = RecordsInCollection |> where([rc], rc.collection_id == ^collection_id) |> all()
-
-    Enum.map(records_in_collection, fn %RecordsInCollection{record_id: record_id} -> get_record(record_id) end)
+  def get_collection(collection_id) do
+    Collection
+    |> get_by(id: collection_id)
+    |> preload(:records)
   end
 
   def get_record(record_id) do

@@ -26,4 +26,12 @@ defmodule ArchinylWeb.SessionController do
     |> put_flash(:info, "Logged out")
     |> redirect(to: "/login")
   end
+
+  def empty_path(conn, _) do
+    if ArchinylWeb.Session.logged_in?(conn) do
+      conn |> redirect(to: "/library")
+    else
+      conn |> redirect(to: "/login")
+    end
+  end
 end

@@ -4,8 +4,12 @@ defmodule Archinyl do
   alias Archinyl.Schema.Record
   alias Archinyl.Schema.Song
 
-  def create_collection(library, name) do
-    case Archinyl.Repo.insert_collection(%Collection{library_id: library, name: name}) do
+  def get_library(user_id) do
+    Archinyl.Repo.get_library(user_id)
+  end
+
+  def create_collection(library_id, name) do
+    case Archinyl.Repo.insert_collection(%Collection{library_id: library_id, name: name}) do
       {:error, _reason} -> :error
       {:ok, _collection} -> :ok
     end
@@ -36,10 +40,6 @@ defmodule Archinyl do
 
   def get_collections(library_id) do
     Archinyl.Repo.get_collections(library_id)
-  end
-
-  def get_records_in_collection(collection_id) do
-    Archinyl.Repo.get_records_in_collection(collection_id)
   end
 
   def add_record_to_collection(record_id, collection_id) do
