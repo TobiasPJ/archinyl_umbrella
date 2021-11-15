@@ -38,13 +38,20 @@ defmodule Archinyl.Repo do
     |> insert()
   end
 
-  def insert_collection(%Collection{library_id: library_id, name: name}) do
-    collection = %Collection{}
-    params = %{library_id: library_id, name: name}
+  def insert_collection(library_id, collection_name) do
+    Library
+    |> get_by(id: library_id)
+    |> preload(:collections)
+    |> Library.changeset_insert_collection(collection_name)
+    |> update()
+  end
 
-    collection
-    |> Collection.changeset(params)
-    |> insert()
+  def remove_collection(library_id, collection_id) do
+    Library
+    |> get_by(id: library_id)
+    |> preload(:collections)
+    |> Library.changeset_remove_collection(collection_id)
+    |> update()
   end
 
   def create_record(%Record{title: title, artist_id: artist_id}) do
@@ -94,7 +101,7 @@ defmodule Archinyl.Repo do
     |> all()
   end
 
-  def get_collections(library_id, search_term) do
+  def search_collections(library_id, search_term) do
     term = "%#{String.downcase(search_term)}%"
 
     Collection
@@ -112,11 +119,20 @@ defmodule Archinyl.Repo do
     Record
     |> get(record_id)
     |> preload(:artist)
+    |> preload(:songs)
+  end
+
+  def get_records do
+    Record
+    |> all()
+    |> preload(:artist)
+    |> preload(:songs)
   end
 
   def get_library(user_id) do
     Library
     |> get_by(user_id: user_id)
+    |> preload(:collections)
   end
 
   def get_user(email) do
@@ -127,5 +143,10 @@ defmodule Archinyl.Repo do
   def get_artist(artist_name) do
     Artist
     |> get_by(name: artist_name)
+  end
+
+  def get_artists do
+    Artist
+    |> all()
   end
 end

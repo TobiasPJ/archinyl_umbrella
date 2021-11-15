@@ -1,5 +1,4 @@
 defmodule Archinyl do
-  alias Archinyl.Schema.Collection
   alias Archinyl.Schema.Artist
   alias Archinyl.Schema.Record
   alias Archinyl.Schema.Song
@@ -9,14 +8,23 @@ defmodule Archinyl do
   end
 
   def create_collection(library_id, name) do
-    case Archinyl.Repo.insert_collection(%Collection{library_id: library_id, name: name}) do
-      {:error, _reason} -> :error
-      {:ok, _collection} -> :ok
-    end
+    Archinyl.Repo.insert_collection(library_id, name)
+  end
+
+  def remove_collection(library_id, collection_id) do
+    Archinyl.Repo.remove_collection(library_id, collection_id)
+  end
+
+  def get_collection(collection_id) do
+    Archinyl.Repo.get_collection(collection_id)
   end
 
   def insert_artist(%Artist{name: _name, birthday: _birthday, sex: _sex} = artist) do
     Archinyl.Repo.insert_artist(artist)
+  end
+
+  def get_records do
+    Archinyl.Repo.get_records()
   end
 
   def create_record(title, artist_name, songs) do
@@ -44,5 +52,9 @@ defmodule Archinyl do
 
   def add_record_to_collection(record_id, collection_id) do
     Archinyl.Repo.insert_record_into_collection(record_id, collection_id)
+  end
+
+  def get_artists do
+    Archinyl.Repo.get_artists()
   end
 end

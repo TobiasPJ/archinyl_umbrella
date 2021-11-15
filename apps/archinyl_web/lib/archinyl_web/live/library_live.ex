@@ -6,7 +6,8 @@ defmodule ArchinylWeb.LibraryLive do
 
   @default_assigns [
     collections: [],
-    add_collection_modal: false
+    add_collection_modal: false,
+    search_term: ""
   ]
 
   @impl true
@@ -15,9 +16,7 @@ defmodule ArchinylWeb.LibraryLive do
       user_id = session["current_user"]
 
       if connected?(socket) do
-        %Library{id: library_id} = Archinyl.get_library(user_id)
-
-        collections = Archinyl.get_collections(library_id)
+        %Library{id: library_id, collections: collections} = Archinyl.get_library(user_id)
 
         socket =
           socket
@@ -36,6 +35,11 @@ defmodule ArchinylWeb.LibraryLive do
   end
 
   @impl true
+  def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("open_add_collection_modal", _, socket) do
     {:noreply, assign(socket, add_collection_modal: true)}
   end
@@ -48,13 +52,16 @@ defmodule ArchinylWeb.LibraryLive do
     library_id = socket.assigns[:library_id]
 
     case Archinyl.create_collection(library_id, name) do
-      :ok ->
-        collections = Archinyl.get_collections(library_id)
+      {:ok, %Library{collections: collections}} ->
         socket = assign(socket, collections: collections)
         {:noreply, socket}
 
-      :error ->
+      {:error, _} ->
         {:noreply, socket}
     end
+  end
+
+  def handle_event("go_to_collection", %{"value" => collection_id}, socket) do
+    {:noreply, redirect(socket, to: "/go_to_collection#{collection_id}")}
   end
 end

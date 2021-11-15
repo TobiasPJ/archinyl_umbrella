@@ -3,7 +3,7 @@ defmodule Archinyl.Schema.Collection do
 
   import Ecto.Changeset
 
-  alias Archinyl.Schema.Collection
+  alias Archinyl.Schema.Library
   alias Archinyl.Schema.Record
   alias Archinyl.Schema.RecordsInCollection
 
@@ -12,7 +12,7 @@ defmodule Archinyl.Schema.Collection do
   schema "collection" do
     field :name, :string, null: false
 
-    belongs_to :library, Collection
+    belongs_to :library, Library
 
     many_to_many :records, Record, join_through: RecordsInCollection, on_replace: :delete
   end

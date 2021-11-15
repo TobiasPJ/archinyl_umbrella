@@ -17,7 +17,7 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="<%=Routes.static_path(@conn, "/images/phoenix.png")%>" width="150px" height="300px">
+        <img src="<%=Routes.static_path(@conn, "/images/archinyl_logo.png")%>" width="60" height="50">
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -29,7 +29,27 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
+        <a class="navbar-item is-uppercase has-text-weight-bold">
+          <%= live_patch to: Routes.static_path(@conn, "/library"), class: "navbar-item" do %>
+          <span class="icon-text">
+            <span class="icon has-text-info">
+              <i class="fas fa-archive"></i>
+            </span>
+            <span>Library</span>
+          </span>
+          <% end %>
+        </a>
 
+        <a class="navbar-item is-uppercase has-text-weight-bold">
+          <%= live_patch to: Routes.static_path(@conn, "/records"), class: "navbar-item" do %>
+          <span class="icon-text">
+            <span class="icon has-text-info">
+              <i class="fas fa-record-vinyl"></i>
+            </span>
+            <span>Records</span>
+          </span>
+          <% end %>
+        </a>
       </div>
       <div class="navbar-end">
         <%= if logged_in?(@conn) do %>

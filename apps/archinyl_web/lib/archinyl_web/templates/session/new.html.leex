@@ -1,4 +1,10 @@
 <%= form_for @conn, ArchinylWeb.Router.Helpers.session_path(@conn, :create), [name: :session], fn f -> %>
+<%= if get_flash(@conn, :info)  do %>
+<div class="alert alert-danger">
+  <p><%=get_flash(@conn, :info)%></p>
+</div>
+<% end %>
+
 <div class="box">
   <h1 class="title">Login</h1>
   <div class="field">

@@ -20,9 +20,16 @@ defmodule ArchinylWeb.SessionController do
     end
   end
 
+  def collection(conn, session_params) do
+    conn
+    |> put_session(:collection_id, session_params["collection_id"])
+    |> redirect(to: "/collection")
+  end
+
   def delete(conn, _) do
     conn
     |> delete_session(:current_user)
+    |> delete_session(:collection_id)
     |> put_flash(:info, "Logged out")
     |> redirect(to: "/login")
   end

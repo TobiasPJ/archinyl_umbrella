@@ -27,12 +27,15 @@ defmodule ArchinylWeb.Router do
     pipe_through :browser
 
     live "/library", LibraryLive, :library
+    live "/collection", CollectionLive, :collection
+    live "/records", RecordsLive, :record
 
     resources "/registration", RegistrationController, only: [:new, :create]
     get "/login", SessionController, :new
     post "/login", SessionController, :create
     delete "/logout", SessionController, :delete
 
+    get "/go_to_collection:collection_id", SessionController, :collection
     get "/*path", SessionController, :empty_path
   end
 end

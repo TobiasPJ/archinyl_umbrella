@@ -5,6 +5,12 @@
 </div>
 <% end %>
 
+<%= if get_flash(@conn, :info)  do %>
+<div class="alert alert-danger">
+  <p><%=get_flash(@conn, :info)%></p>
+</div>
+<% end %>
+
 <div class="box">
   <h1 class="title">Create an account</h1>
   <div class="field">

@@ -11,6 +11,8 @@ defmodule Archinyl.Schema.Record do
     field :title, :string
 
     belongs_to :artist, Artist
+
+    has_many :songs, Archinyl.Schema.Song
   end
 
   def changeset(record, params \\ %{}) do
