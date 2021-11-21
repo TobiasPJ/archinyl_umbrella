@@ -7,17 +7,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <%= csrf_meta_tag() %>
   <%= live_title_tag  "Archinyl", suffix: " · Phoenix Framework" %>
-  <link rel="shortcut icon" href="<%=Routes.static_path(@conn, "/favicon.ico")%>" type="image/x-icon">
-  <link rel="icon" href="<%=Routes.static_path(@conn, "/favicon.ico")%>" type="image/x-icon">
-  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>" />
-  <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  <link rel="shortcut icon" href={Routes.static_path(@conn, "/favicon.ico" )} type="image/x-icon">
+  <link rel="icon" href={Routes.static_path(@conn, "/favicon.ico" )} type="image/x-icon">
+  <link rel="stylesheet" href={Routes.static_path(@conn, "/css/app.css" )} />
+  <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/js/app.js" )}></script>
 </head>
 
 <body>
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="<%=Routes.static_path(@conn, "/images/archinyl_logo.png")%>" width="60" height="50">
+        <img src={Routes.static_path(@conn, "/images/archinyl_logo.png" )} width="60" height="50">
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -50,6 +50,17 @@
           </span>
           <% end %>
         </a>
+
+        <a class="navbar-item is-uppercase has-text-weight-bold">
+          <%= live_patch to: Routes.static_path(@conn, "/artists"), class: "navbar-item" do %>
+          <span class="icon-text">
+            <span class="icon has-text-info">
+              <i class="fas fa-users"></i>
+            </span>
+            <span>Artists</span>
+          </span>
+          <% end %>
+        </a>
       </div>
       <div class="navbar-end">
         <%= if logged_in?(@conn) do %>
@@ -57,15 +68,14 @@
           <p><%= current_user(@conn).email %></p>
         </a>
         <a class="navbar-item">
-          <p><%= link "Logout", to: ArchinylWeb.Router.Helpers.session_path(@conn, :delete), method: :delete %></p>
+          <%=button("Logout", to: ArchinylWeb.Router.Helpers.session_path(@conn, :delete), method: :delete, class: "button is-small") %>
         </a>
         <% else %>
         <a class="navbar-item">
-          <p><%= link "Login",    to: "/login" %></p>
+          <%= button("Login", to: "/login", method: :get, class: "button is-small")%>
         </a>
         <a class="navbar-item">
-          <p style="margin-right: 0.5rem">
-            <%= link "Register", to: ArchinylWeb.Router.Helpers.registration_path(@conn, :new) %></p>
+          <%= button("Register", to: ArchinylWeb.Router.Helpers.registration_path(@conn, :new), method: :get, class: "button is-small")%>
         </a>
         <% end %>
       </div>

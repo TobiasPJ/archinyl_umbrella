@@ -30,8 +30,7 @@
             <%=collection.name %>
           </p>
           <div class="panel-block">
-            <button class="button is-link is-outlined is-fullwidth" phx-click="go_to_collection"
-              value="<%=collection.id %>">
+            <button class="button is-link is-outlined is-fullwidth" phx-click="go_to_collection" value={collection.id}>
               Open
             </button>
           </div>

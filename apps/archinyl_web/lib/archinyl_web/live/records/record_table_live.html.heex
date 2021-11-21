@@ -1,0 +1,57 @@
+<div class="block" id={@id}>
+    <% alias ArchinylWeb.Records.CreateRecordModalLive %>
+    <% alias ArchinylWeb.Records.RecordInformationModalLive %>
+    <div class="container">
+        <div class="is-flex is-justify-content-space-between">
+            <form phx-change="search_records" phx-target={@myself} style="width: 30%">
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <%=content_tag(:input, class: "input is-normal", name: "search_term", type: "text") do end%>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <div class="control">
+                    <button class="button is-primary is-pulled-right" phx-click="open_add_record_modal"
+                        phx-target={@myself}>Add
+                        record</button>
+                </div>
+            </div>
+        </div>
+        <table class="table is-striped is-hoverable">
+            <thead>
+                <tr>
+                    <th>Cover</th>
+                    <th>Title</th>
+                    <th>Artist</th>
+                    <th>Songs</th>
+                    <th>Total runtime</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%= for record <- @records do%>
+                <tr phx-click="show_record_information" phx-target={@myself} phx-value-record_id={record.id}
+                    class="is-clickable">
+                    <td><img class="record-logo" src={record.logo_url} alt=""></td>
+                    <td><%=record.title%></td>
+                    <td><%=record.artist.name%></td>
+                    <td><%=length(record.songs)%></td>
+                    <td><%=Time.from_seconds_after_midnight(record.total_runtime)%></td>
+                </tr>
+                <%end %>
+            </tbody>
+        </table>
+        <%= ArchinylWeb.Components.Pagination.pagination(@myself, @page_number, @number_of_pages, @total_count, "record", "records")%>
+    </div>
+
+    <%= if @add_record_modal do %>
+    <.live_component module={CreateRecordModalLive} id="create_record_modal" />
+    <%end %>
+
+    <%= if @show_record_information do %>
+    <.live_component module={RecordInformationModalLive} id="record_information_modal" record_id={@record_id} />
+    <%end %>
+</div>

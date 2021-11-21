@@ -1,0 +1,56 @@
+ <div id={@id}>
+     <% alias ArchinylWeb.Artists.CreateArtistModalLive %>
+     <div class="is-flex is-justify-content-space-between">
+         <form class="mb-0" phx-change="search_artists" phx-target={@myself} style="width: 30%"
+             onkeydown="return event.key != 'Enter';">
+             <div class="field">
+                 <div class="control has-icons-left">
+                     <%=content_tag(:input, class: "input is-normal", name: "search_term", type: "text", value: @search_term) do end%>
+                     <span class="icon is-small is-left">
+                         <i class="fas fa-search"></i>
+                     </span>
+                 </div>
+             </div>
+         </form>
+         <div class="field mb-0 is-align-items-center">
+             <div class="control">
+                 <button class="button is-primary is-pulled-right" phx-click="open_create_artist_modal"
+                     phx-target={@myself}>
+                     Add artist
+                 </button>
+             </div>
+         </div>
+     </div>
+     <div class="columns is-multiline">
+         <%= for artist <- @artists do%>
+
+         <div class="column is-one-quarter">
+             <div class="card">
+                 <div class="card-image">
+                     <figure class="image is-3by3">
+                         <img src={artist.picture_url} alt="">
+                     </figure>
+                 </div>
+                 <div class="card-content">
+                     <div class="media">
+                         <div class="media-content">
+                             <p class="title is-3"><%=artist.name%></p>
+                             <p class="subtitle is-6">Age <%=artist.age%></p>
+                         </div>
+                     </div>
+
+                     <div class="content">
+                         <%=artist.description %>
+                     </div>
+                 </div>
+             </div>
+
+         </div>
+         <%end %>
+     </div>
+
+     <%=if @creating_artist do%>
+     <.live_component module={CreateArtistModalLive} id="create_artist_modal" />
+     <% end %>
+
+ </div>

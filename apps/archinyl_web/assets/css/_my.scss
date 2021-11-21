@@ -1,0 +1,15 @@
+.record-logo {
+    display: block;
+    width: 50px;
+}
+
+tr {
+    min-height: 50px;
+}
+
+table td:not([align]),
+table th:not([align]) {
+    text-align: inherit;
+    vertical-align: middle;
+
+}

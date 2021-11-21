@@ -5,10 +5,11 @@ defmodule Archinyl.Schema.Record do
 
   alias Archinyl.Schema.Artist
 
-  @parameters [:title, :artist_id]
+  @parameters [:title, :artist_id, :logo_url]
 
   schema "record" do
     field :title, :string
+    field :logo_url, :string
 
     belongs_to :artist, Artist
 
@@ -20,5 +21,11 @@ defmodule Archinyl.Schema.Record do
     |> cast(params, @parameters)
     |> validate_required(@parameters)
     |> foreign_key_constraint(:artist_id)
+  end
+
+  def changeset_insert_songs(record, songs) do
+    record
+    |> cast(%{}, @parameters)
+    |> put_assoc(:songs, record.songs ++ songs)
   end
 end

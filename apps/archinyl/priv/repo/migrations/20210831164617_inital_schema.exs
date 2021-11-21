@@ -33,6 +33,7 @@ defmodule Archinyl.Repo.Migrations.InitalSchema do
     create table(:record) do
       add :title, :string, null: :false
       add :artist_id, references(:artist), null: :false
+
     end
 
     create table(:records_in_collection) do

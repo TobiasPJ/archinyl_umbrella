@@ -14,7 +14,6 @@ config :archinyl,
   ecto_repos: [Archinyl.Repo]
 
 config :archinyl_web,
-  ecto_repos: [Archinyl.Repo],
   generators: [context_app: :archinyl]
 
 # Configures the endpoint

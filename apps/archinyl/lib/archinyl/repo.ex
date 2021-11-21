@@ -3,7 +3,7 @@ defmodule Archinyl.Repo do
     otp_app: :archinyl,
     adapter: Ecto.Adapters.Postgres
 
-  import Ecto.Query, only: [where: 3]
+  import Ecto.Query, only: [where: 3, limit: 2, offset: 2, order_by: 2]
 
   alias Archinyl.Schema.User
   alias Archinyl.Schema.Library
@@ -12,6 +12,7 @@ defmodule Archinyl.Repo do
   alias Archinyl.Schema.Artist
   alias Archinyl.Schema.Song
   alias Archinyl.Schema.RecordsInCollection
+  alias Ecto.Query
 
   def insert_user(user) do
     %User{
@@ -54,18 +55,32 @@ defmodule Archinyl.Repo do
     |> update()
   end
 
-  def create_record(%Record{title: title, artist_id: artist_id}) do
+  def create_record(title, artist_id, cover_url) do
     record = %Record{}
-    params = %{title: title, artist_id: artist_id}
+    params = %{title: title, artist_id: artist_id, logo_url: cover_url}
 
     record
     |> Record.changeset(params)
     |> insert()
   end
 
-  def insert_artist(%Artist{name: name, birthday: birthday, sex: sex}) do
+  def update_record_songs(record, songs) do
+    record
+    |> preload(:songs)
+    |> Record.changeset_insert_songs(songs)
+    |> update()
+  end
+
+  def insert_artist(name, birthday, sex, picture_url, description) do
     artist = %Artist{}
-    params = %{name: name, birthday: birthday, sex: sex}
+
+    params = %{
+      name: name,
+      birthday: birthday,
+      sex: sex,
+      picture_url: picture_url,
+      description: description
+    }
 
     artist
     |> Artist.changeset(params)
@@ -122,11 +137,20 @@ defmodule Archinyl.Repo do
     |> preload(:songs)
   end
 
-  def get_records do
-    Record
-    |> all()
-    |> preload(:artist)
-    |> preload(:songs)
+  def get_records(search_term, limit, offset) do
+    term = "%#{String.downcase(search_term)}%"
+
+    total_count = aggregate(Record, :count, :id)
+
+    records =
+      Record
+      |> Query.preload(:artist)
+      |> Query.preload(:songs)
+      |> where([r], fragment("like(lower(?), ?)", r.title, ^term))
+      |> pagination(limit, offset)
+      |> all()
+
+    %{total_count: total_count, records: records}
   end
 
   def get_library(user_id) do
@@ -145,8 +169,29 @@ defmodule Archinyl.Repo do
     |> get_by(name: artist_name)
   end
 
+  def get_artists(search_term, limit, offset) do
+    term = "%#{String.downcase(search_term)}%"
+
+    total_count = aggregate(Artist, :count, :id)
+
+    artists =
+      Artist
+      |> where([r], fragment("like(lower(?), ?)", r.name, ^term))
+      |> pagination(limit, offset)
+      |> all()
+
+    %{total_count: total_count, artists: artists}
+  end
+
   def get_artists do
     Artist
     |> all()
+  end
+
+  defp pagination(query, limit, offset) do
+    query
+    |> order_by(desc: :id)
+    |> limit(^limit)
+    |> offset(^offset)
   end
 end

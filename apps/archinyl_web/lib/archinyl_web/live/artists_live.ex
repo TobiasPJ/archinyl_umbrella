@@ -1,14 +1,11 @@
-defmodule ArchinylWeb.RecordsLive do
+defmodule ArchinylWeb.ArtistsLive do
   use ArchinylWeb, :live_view
 
-  alias Phoenix.HTML.Tag
-  alias Archinyl.Schema.Song
-  alias ArchinylWeb.Records.RecordTableLive
-
   @default_assigns [
-    search_term: "",
+    artists: [],
+    page_number: 1,
     page_size: 15,
-    page_number: 1
+    search_term: ""
   ]
 
   @impl true
@@ -30,14 +27,8 @@ defmodule ArchinylWeb.RecordsLive do
       |> set_search_term(params)
       |> set_page_term(params)
 
-    Phoenix.PubSub.subscribe(Archinyl.PubSub, "records")
+    Phoenix.PubSub.subscribe(Archinyl.PubSub, "artists")
 
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_info({:new_record, record}, socket) do
-    send_update(RecordTableLive, id: "records_table", new_record: record)
     {:noreply, socket}
   end
 
