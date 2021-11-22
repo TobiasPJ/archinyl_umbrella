@@ -1,5 +1,6 @@
  <div id={@id}>
-     <% alias ArchinylWeb.Artists.CreateArtistModalLive %>
+     <% alias ArchinylWeb.Artists.Modal.CreateArtistLive %>
+     <% alias ArchinylWeb.Artists.Modal.ArtistInformationLive %>
      <div class="is-flex is-justify-content-space-between">
          <form class="mb-0" phx-change="search_artists" phx-target={@myself} style="width: 30%"
              onkeydown="return event.key != 'Enter';">
@@ -14,10 +15,7 @@
          </form>
          <div class="field mb-0 is-align-items-center">
              <div class="control">
-                 <button class="button is-primary is-pulled-right" phx-click="open_create_artist_modal"
-                     phx-target={@myself}>
-                     Add artist
-                 </button>
+                 <%=content_tag(:button, class: "button is-primary is-pulled-right", phx_click: "open_create_artist_modal", phx_target: @myself, disabled: !@logged_in?) do "Add artist" end %>
              </div>
          </div>
      </div>
@@ -25,7 +23,7 @@
          <%= for artist <- @artists do%>
 
          <div class="column is-one-quarter">
-             <div class="card">
+             <div class="card" phx-click="open_artist_information" phx-target={@myself} phx-value-artist_id={artist.id}>
                  <div class="card-image">
                      <figure class="image is-3by3">
                          <img src={artist.picture_url} alt="">
@@ -50,7 +48,10 @@
      </div>
 
      <%=if @creating_artist do%>
-     <.live_component module={CreateArtistModalLive} id="create_artist_modal" />
+     <.live_component module={CreateArtistLive} id="create_artist_modal" />
      <% end %>
 
+     <%=if @artist_information do%>
+     <.live_component module={ArtistInformationLive} id="artist_information_modal" artist={@artist} />
+     <% end %>
  </div>

@@ -48,31 +48,22 @@
                         </div>
                         <div class="control">
                             <label class="label">add</label>
-                            <button class="button is-ghost" form="songForm">
-                                <span class="icon is-small">
-                                    <i class="fas fa-plus"></i>
-                                </span>
+                            <button class="plus-button" form="songForm">
+
                             </button>
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="control">
-                            <table class="table is-hoverable">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
+                            <table class="table is-hoverable is-narrow is-bordered">
                                 <tbody>
                                     <%= for song <- @add_record_songs do%>
                                     <tr>
                                         <td><%=song.title%></td>
                                         <td><%=song.runtime%></td>
                                         <td>
-                                            <%=content_tag(:button, class: "button is-ghost", phx_click: "remove_song_from_record", phx_target: @myself, value: song.title) do%>
+                                            <%=content_tag(:button, class: "minus-button minus-button--small", phx_click: "remove_song_from_record", phx_target: @myself, value: song.title) do%>
                                             <span class="icon is-small">
                                                 <i class="fas fa-minus"></i>
                                             </span>

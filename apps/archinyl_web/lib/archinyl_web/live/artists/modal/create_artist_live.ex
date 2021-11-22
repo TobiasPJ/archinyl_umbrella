@@ -1,4 +1,4 @@
-defmodule ArchinylWeb.Artists.CreateArtistModalLive do
+defmodule ArchinylWeb.Artists.Modal.CreateArtistLive do
   use ArchinylWeb, :live_component
 
   @default_assigns []

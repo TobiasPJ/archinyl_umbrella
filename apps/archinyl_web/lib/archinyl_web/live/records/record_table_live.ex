@@ -53,11 +53,13 @@ defmodule ArchinylWeb.Records.RecordTableLive do
   end
 
   def handle_event("show_record_information", %{"record_id" => record_id}, socket) do
-    {:noreply, assign(socket, show_record_information: true, record_id: record_id)}
+    record_id = String.to_integer(record_id)
+    record = Enum.find(socket.assigns[:records], %{}, &(&1.id == record_id))
+    {:noreply, assign(socket, show_record_information: true, record: record)}
   end
 
   def handle_event("close_record_information", _params, socket) do
-    {:noreply, assign(socket, show_record_information: false, record_id: nil)}
+    {:noreply, assign(socket, show_record_information: false, record: %{})}
   end
 
   def handle_event("search_records", %{"search_term" => search_term}, socket) do

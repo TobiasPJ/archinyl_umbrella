@@ -1,2 +1,2 @@
 <% alias ArchinylWeb.Records.RecordTableLive%>
-<%= live_component(%{module: RecordTableLive, id: "records_table", search_term: @search_term, page_number: @page_number}) %>
+<%= live_component(%{module: RecordTableLive, id: "records_table", search_term: @search_term, page_number: @page_number, logged_in?: @logged_in?}) %>

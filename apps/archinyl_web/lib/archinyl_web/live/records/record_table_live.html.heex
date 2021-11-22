@@ -1,6 +1,6 @@
 <div class="block" id={@id}>
-    <% alias ArchinylWeb.Records.CreateRecordModalLive %>
-    <% alias ArchinylWeb.Records.RecordInformationModalLive %>
+    <% alias ArchinylWeb.Records.Modal.CreateRecordLive %>
+    <% alias ArchinylWeb.Records.Modal.RecordInformationLive %>
     <div class="container">
         <div class="is-flex is-justify-content-space-between">
             <form phx-change="search_records" phx-target={@myself} style="width: 30%">
@@ -15,9 +15,8 @@
             </form>
             <div>
                 <div class="control">
-                    <button class="button is-primary is-pulled-right" phx-click="open_add_record_modal"
-                        phx-target={@myself}>Add
-                        record</button>
+                    <%=content_tag(:button, class: "button is-primary is-pulled-right", phx_click: "open_add_record_modal", phx_target: @myself, disabled: !@logged_in?) do "Add record" end %>
+
                 </div>
             </div>
         </div>
@@ -48,10 +47,10 @@
     </div>
 
     <%= if @add_record_modal do %>
-    <.live_component module={CreateRecordModalLive} id="create_record_modal" />
+    <.live_component module={CreateRecordLive} id="create_record_modal" />
     <%end %>
 
     <%= if @show_record_information do %>
-    <.live_component module={RecordInformationModalLive} id="record_information_modal" record_id={@record_id} />
+    <.live_component module={RecordInformationLive} id="record_information_modal" record={@record} />
     <%end %>
 </div>

@@ -13,3 +13,74 @@ table th:not([align]) {
     vertical-align: middle;
 
 }
+
+.image.is-220x220 {
+    width: 220px;
+    height: 220px;
+}
+
+.plus-button,
+.minus-button {
+    border: none;
+    background-color: #fff;
+    font-size: 16px;
+    height: 2.5em;
+    width: 2.5em;
+    border-radius: 999px;
+    position: relative;
+
+
+}
+
+.plus-button {
+
+    &:before,
+    &:after {
+        content: "";
+        display: block;
+        background-color: #485fc7;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+        background-color: lightgray;
+    }
+
+    &:before {
+        height: 1em;
+        width: 0.2em;
+    }
+
+    &:after {
+        height: 0.2em;
+        width: 1em;
+    }
+}
+
+.minus-button {
+    &:after {
+        content: "";
+        display: block;
+        background-color: #485fc7;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+        background-color: lightgray;
+    }
+
+    &:after {
+        height: 0.2em;
+        width: 1em;
+    }
+}
+
+.minus-button--small {
+    font-size: 12px;
+}

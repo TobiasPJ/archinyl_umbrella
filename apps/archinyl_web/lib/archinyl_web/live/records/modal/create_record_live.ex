@@ -1,4 +1,4 @@
-defmodule ArchinylWeb.Records.CreateRecordModalLive do
+defmodule ArchinylWeb.Records.Modal.CreateRecordLive do
   use ArchinylWeb, :live_component
 
   alias Archinyl.Schema.Song
@@ -30,9 +30,7 @@ defmodule ArchinylWeb.Records.CreateRecordModalLive do
     add_record_songs = socket.assigns[:add_record_songs]
     {:ok, runtime} = Time.from_iso8601("00:" <> runtime)
 
-    add_record_songs = [
-      %Song{title: title, runtime: runtime} | add_record_songs
-    ]
+    add_record_songs = add_record_songs ++ [%Song{title: title, runtime: runtime}]
 
     {:noreply, assign(socket, add_record_songs: add_record_songs)}
   end

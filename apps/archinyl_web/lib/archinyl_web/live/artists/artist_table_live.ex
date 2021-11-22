@@ -33,8 +33,31 @@ defmodule ArchinylWeb.Artists.ArtistTableLive do
 
   @impl true
   def handle_event("open_create_artist_modal", _params, socket) do
-    IO.inspect("!!!!!!!!!!!")
     {:noreply, assign(socket, creating_artist: true)}
+  end
+
+  def handle_event("open_artist_information", %{"artist_id" => artist_id}, socket) do
+    set_params(socket, %{artist_information: "opened", artist: artist_id})
+  end
+
+  def handle_event("close_artist_information", _params, socket) do
+    set_params(socket, %{artist_information: "closed", artist: nil})
+  end
+
+  defp set_params(socket, params) do
+    %{
+      artist_information: artist_information,
+      artist: artist
+    } = params
+
+    {:noreply,
+     push_patch(socket,
+       to:
+         Routes.artists_path(socket, :artist,
+           artist_information: artist_information,
+           artist: artist
+         )
+     )}
   end
 
   defp get_artists(socket) do

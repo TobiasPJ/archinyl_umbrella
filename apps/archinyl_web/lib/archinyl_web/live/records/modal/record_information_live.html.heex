@@ -1,0 +1,35 @@
+<div id={@id} class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title"><%=@record.title%></p>
+        </header>
+        <section class="modal-card-body">
+            <div class="is-flex is-justify-content-center">
+                <figure class="image is-220x220">
+                    <img src={@record.logo_url} alt="">
+                </figure>
+            </div>
+            <hr>
+            <h1 class="title">Songs</h1>
+            <div class="block">
+                <table class="table is-narrow is-bordered">
+                    <tbody>
+                        <%= for song <- @record.songs do%>
+                        <tr>
+                            <td><%=song.title%></td>
+                            <td><%=song.runtime%></td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-fullwidth is-rounded is-link is-light" phx-click="close_record_information"
+                phx-target="#records_table">
+                Close
+            </button>
+        </footer>
+    </div>
+</div>
