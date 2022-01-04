@@ -1,12 +1,13 @@
 <div class="block" id={@id}>
     <% alias ArchinylWeb.Records.Modal.CreateRecordLive %>
     <% alias ArchinylWeb.Records.Modal.RecordInformationLive %>
+    <% alias ArchinylWeb.Records.Modal.AddRecordToCollectionLive %>
     <div class="container">
         <div class="is-flex is-justify-content-space-between">
             <form phx-change="search_records" phx-target={@myself} style="width: 30%">
                 <div class="field">
                     <div class="control has-icons-left">
-                        <%=content_tag(:input, class: "input is-normal", name: "search_term", type: "text") do end%>
+                        <%=content_tag(:input, class: "input is-normal", name: "search_term", type: "text", value: @search_term) do end%>
                         <span class="icon is-small is-left">
                             <i class="fas fa-search"></i>
                         </span>
@@ -28,6 +29,7 @@
                     <th>Artist</th>
                     <th>Songs</th>
                     <th>Total runtime</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,9 +38,13 @@
                     class="is-clickable">
                     <td><img class="record-logo" src={record.logo_url} alt=""></td>
                     <td><%=record.title%></td>
-                    <td><%=record.artist.name%></td>
+                    <td> <%= link(record.artist.name, to: "/artists?artist_information=opened&artist=#{record.artist.id}") %>
+                    </td>
                     <td><%=length(record.songs)%></td>
                     <td><%=Time.from_seconds_after_midnight(record.total_runtime)%></td>
+                    <td>
+                        <%= content_tag(:button, class: "plus-button", phx_click: "open_add_to_collection_modal", phx_target: @myself, value: record.id, disabled: !@logged_in?) do end%>
+                    </td>
                 </tr>
                 <%end %>
             </tbody>
@@ -47,10 +53,15 @@
     </div>
 
     <%= if @add_record_modal do %>
-    <.live_component module={CreateRecordLive} id="create_record_modal" />
+    <.live_component module={CreateRecordLive} id="create_record_modal" logged_in?={@logged_in?} />
     <%end %>
 
     <%= if @show_record_information do %>
-    <.live_component module={RecordInformationLive} id="record_information_modal" record={@record} />
+    <%= live_component(%{module: RecordInformationLive, id: "record_information_modal", record: @record, caller: @self}) %>
+    <%end %>
+
+    <%= if @add_to_collection_modal do %>
+    <.live_component module={AddRecordToCollectionLive} id="add_record_to_collection_modal"
+        record_to_add={@record_to_add} logged_in?={@logged_in?} />
     <%end %>
 </div>

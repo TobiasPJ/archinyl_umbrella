@@ -1,0 +1,28 @@
+<div id={@id}>
+    <%= if @logged_in? do%>
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Add <%=@record_to_add.title%> to collection</p>
+            </header>
+            <section class="modal-card-body">
+                <table class="table">
+                    <tbody>
+                        <%=for collection <- @collections do %>
+                        <tr phx-click="add_record_to_collection" phx-target={@myself}
+                            phx-value-collection_id={collection.id} class="is-clickable">
+                            <td><%=collection.name%></td>
+                        </tr>
+                        <%end %>
+                    </tbody>
+                </table>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-fullwidth" type="button" phx-click="close_add_to_collection_modal"
+                    phx-target="#records_table">Cancel</button>
+            </footer>
+        </div>
+    </div>
+    <%end %>
+</div>

@@ -11,6 +11,22 @@
   <link rel="icon" href={Routes.static_path(@conn, "/favicon.ico" )} type="image/x-icon">
   <link rel="stylesheet" href={Routes.static_path(@conn, "/css/app.css" )} />
   <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/js/app.js" )}></script>
+  <link href="./jquery.minipreview.css" rel="stylesheet">
+  <script src="./jquery.minipreview.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('#p1 a').miniPreview({
+        prefetch: 'pageload'
+      });
+      $('#p2 a').miniPreview({
+        prefetch: 'parenthover'
+      });
+      $('#p3 a').miniPreview({
+        prefetch: 'none'
+      });
+    });
+  </script>
+  <script src="https://rawgit.com/shaneapen/Image-Preview-for-Links/master/image_preview_for_links.js"></script>
 </head>
 
 <body>
@@ -68,14 +84,14 @@
           <p><%= current_user(@conn).email %></p>
         </a>
         <a class="navbar-item">
-          <%=button("Logout", to: ArchinylWeb.Router.Helpers.session_path(@conn, :delete), method: :delete, class: "button is-small") %>
+          <%=button("Logout", to: Routes.session_path(@conn, :delete), method: :delete, class: "button is-small") %>
         </a>
         <% else %>
         <a class="navbar-item">
           <%= button("Login", to: "/login", method: :get, class: "button is-small")%>
         </a>
         <a class="navbar-item">
-          <%= button("Register", to: ArchinylWeb.Router.Helpers.registration_path(@conn, :new), method: :get, class: "button is-small")%>
+          <%= button("Register", to: Routes.registration_path(@conn, :new), method: :get, class: "button is-small")%>
         </a>
         <% end %>
       </div>

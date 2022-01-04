@@ -1,13 +1,13 @@
 defmodule ArchinylWeb.ArtistsLive do
   use ArchinylWeb, :live_view
 
-  alias Archinyl.Artist.ArtistTableLive
+  alias ArchinylWeb.Artists.ArtistTableLive
 
   @default_assigns [
     artists: [],
     page_number: 1,
     page_size: 15,
-    search_term: "",
+    search: "",
     artist_information: "closed",
     artist: nil
   ]
@@ -34,7 +34,24 @@ defmodule ArchinylWeb.ArtistsLive do
       |> set_page_term(params)
 
     Phoenix.PubSub.subscribe(Archinyl.PubSub, "artists")
+    Phoenix.PubSub.subscribe(Archinyl.PubSub, "artist")
 
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:new_description_for, id}, socket) do
+    send_update(ArtistTableLive, id: "artists_table", new_description_for: id)
+    {:noreply, socket}
+  end
+
+  def handle_info({:new_picture_url, id}, socket) do
+    send_update(ArtistTableLive, id: "artists_table", new_picture_url: id)
+    {:noreply, socket}
+  end
+
+  def handle_info({:new_artist, artist}, socket) do
+    send_update(ArtistTableLive, id: "artists_table", new_artist: artist)
     {:noreply, socket}
   end
 
@@ -53,7 +70,7 @@ defmodule ArchinylWeb.ArtistsLive do
 
   defp set_search_term(socket, params) do
     search_term = params["search"]
-    assign(socket, search_term: search_term || "")
+    assign(socket, search: search_term || "")
   end
 
   defp set_page_term(socket, params) do

@@ -23,4 +23,17 @@ defmodule Archinyl.Schema.Collection do
     |> validate_required(@parameters)
     |> foreign_key_constraint(:library_id)
   end
+
+  def update_records_in_collection(collection, record) do
+    collection
+    |> cast(%{}, @parameters)
+    |> put_assoc(:records, collection.records ++ [record])
+    |> unique_constraint(:records)
+  end
+
+  def remove_record_from_collection(collection, record) do
+    collection
+    |> cast(%{}, @parameters)
+    |> put_assoc(:records, collection.records -- [record])
+  end
 end

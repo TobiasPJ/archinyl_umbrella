@@ -41,7 +41,8 @@ defmodule Archinyl.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:comeonin, "~> 5.3"}
+      {:comeonin, "~> 5.3"},
+      {:httpoison, "~> 1.8"}
     ]
   end
 

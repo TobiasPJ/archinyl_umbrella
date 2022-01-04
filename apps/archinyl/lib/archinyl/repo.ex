@@ -5,14 +5,14 @@ defmodule Archinyl.Repo do
 
   import Ecto.Query, only: [where: 3, limit: 2, offset: 2, order_by: 2]
 
-  alias Archinyl.Schema.User
-  alias Archinyl.Schema.Library
-  alias Archinyl.Schema.Collection
-  alias Archinyl.Schema.Record
-  alias Archinyl.Schema.Artist
-  alias Archinyl.Schema.Song
-  alias Archinyl.Schema.RecordsInCollection
-  alias Ecto.Query
+  alias Archinyl.Schema.{
+    User,
+    Library,
+    Collection,
+    Record,
+    Artist,
+    Song
+  }
 
   def insert_user(user) do
     %User{
@@ -55,9 +55,9 @@ defmodule Archinyl.Repo do
     |> update()
   end
 
-  def create_record(title, artist_id, cover_url) do
+  def create_record(title, artist_id, embed_link, cover_url) do
     record = %Record{}
-    params = %{title: title, artist_id: artist_id, logo_url: cover_url}
+    params = %{title: title, artist_id: artist_id, logo_url: cover_url, embed_link: embed_link}
 
     record
     |> Record.changeset(params)
@@ -101,13 +101,22 @@ defmodule Archinyl.Repo do
     |> insert()
   end
 
-  def insert_record_into_collection(record_id, collection_id) do
-    records_in_collection = %RecordsInCollection{}
-    params = %{record_id: record_id, collection_id: collection_id}
+  def insert_record_into_collection(collection_id, record) do
+    collection = get_by(Collection, id: collection_id)
 
-    records_in_collection
-    |> RecordsInCollection.changeset(params)
-    |> insert()
+    collection
+    |> preload(:records)
+    |> Collection.update_records_in_collection(record)
+    |> update()
+  end
+
+  def remove_record_from_collection(collection, record_id) do
+    record = get_by(Record, id: record_id) |> preload(:artist) |> preload(:songs)
+
+    collection
+    |> preload(:records)
+    |> Collection.remove_record_from_collection(record)
+    |> update()
   end
 
   def get_collections(library_id) do
@@ -127,7 +136,7 @@ defmodule Archinyl.Repo do
   def get_collection(collection_id) do
     Collection
     |> get_by(id: collection_id)
-    |> preload(:records)
+    |> preload(records: [:artist, :songs])
   end
 
   def get_record(record_id) do
@@ -144,11 +153,11 @@ defmodule Archinyl.Repo do
 
     records =
       Record
-      |> Query.preload(:artist)
-      |> Query.preload(:songs)
       |> where([r], fragment("like(lower(?), ?)", r.title, ^term))
       |> pagination(limit, offset)
       |> all()
+      |> preload(:artist)
+      |> preload(:songs)
 
     %{total_count: total_count, records: records}
   end
@@ -162,11 +171,6 @@ defmodule Archinyl.Repo do
   def get_user(email) do
     User
     |> get_by(email: email)
-  end
-
-  def get_artist(artist_name) do
-    Artist
-    |> get_by(name: artist_name)
   end
 
   def get_artists(search_term, limit, offset) do
@@ -183,9 +187,28 @@ defmodule Archinyl.Repo do
     %{total_count: total_count, artists: artists}
   end
 
+  def get_artist(id) do
+    get(Artist, id)
+  end
+
   def get_artists do
     Artist
     |> all()
+  end
+
+  def check_if_artist_exist(name, birthday) do
+    term = "%#{String.downcase(name)}%"
+
+    Artist
+    |> where([a], fragment("like(lower(?), ?)", a.name, ^term) and a.birthday == ^birthday)
+    |> exists?()
+  end
+
+  def update_artist(artist_id, new_data) do
+    Artist
+    |> get(artist_id)
+    |> Ecto.Changeset.change(new_data)
+    |> update()
   end
 
   defp pagination(query, limit, offset) do

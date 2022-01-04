@@ -5,6 +5,7 @@ defmodule ArchinylWeb.Records.RecordTableLive do
     records: [],
     add_record_modal: false,
     show_record_information: false,
+    add_to_collection_modal: false,
     search_term: "",
     page_size: 15,
     page_number: 1,
@@ -13,10 +14,12 @@ defmodule ArchinylWeb.Records.RecordTableLive do
   ]
 
   @impl true
+
   def mount(socket) do
     socket =
       socket
       |> assign(@default_assigns)
+      |> assign(self: self())
       |> get_records()
       |> calc_total_runtime()
 
@@ -24,6 +27,10 @@ defmodule ArchinylWeb.Records.RecordTableLive do
   end
 
   @impl true
+  def update(%{show_record_information: val}, socket) do
+    {:ok, assign(socket, record: %{}, show_record_information: val)}
+  end
+
   def update(%{new_record: _record}, socket) do
     socket =
       socket
@@ -53,17 +60,21 @@ defmodule ArchinylWeb.Records.RecordTableLive do
   end
 
   def handle_event("show_record_information", %{"record_id" => record_id}, socket) do
-    record_id = String.to_integer(record_id)
-    record = Enum.find(socket.assigns[:records], %{}, &(&1.id == record_id))
+    record = find_record(socket, record_id)
     {:noreply, assign(socket, show_record_information: true, record: record)}
-  end
-
-  def handle_event("close_record_information", _params, socket) do
-    {:noreply, assign(socket, show_record_information: false, record: %{})}
   end
 
   def handle_event("search_records", %{"search_term" => search_term}, socket) do
     set_params(assign(socket, search_term: search_term))
+  end
+
+  def handle_event("open_add_to_collection_modal", %{"value" => record_id}, socket) do
+    record = find_record(socket, record_id)
+    {:noreply, assign(socket, add_to_collection_modal: true, record_to_add: record)}
+  end
+
+  def handle_event("close_add_to_collection_modal", _params, socket) do
+    {:noreply, assign(socket, add_to_collection_modal: false, record_to_add: nil)}
   end
 
   def handle_event("next_page", _params, socket) do
@@ -120,6 +131,11 @@ defmodule ArchinylWeb.Records.RecordTableLive do
       total_count: total_count,
       number_of_pages: ceil(total_count / limit)
     )
+  end
+
+  defp find_record(socket, record_id) do
+    record_id = String.to_integer(record_id)
+    Enum.find(socket.assigns[:records], %{}, &(&1.id == record_id))
   end
 
   defp calc_total_runtime(socket) do

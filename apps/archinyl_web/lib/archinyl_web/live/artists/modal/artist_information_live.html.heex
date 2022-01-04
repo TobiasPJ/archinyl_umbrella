@@ -1,17 +1,53 @@
-<div id={@id} class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <header class="modal-card-head">
-            <p class="modal-card-title"></p>
-        </header>
-        <section class="modal-card-body">
+<div id={@id}>
+    <form id="editForm" method="post" phx-submit="edit_artist" phx-target={@myself}></form>
 
-        </section>
-        <footer class="modal-card-foot">
-            <button class="button is-fullwidth is-rounded is-link is-light" phx-click="close_artist_information"
-                phx-target="#artists_table">
-                Close
-            </button>
-        </footer>
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div class="column is-three-fifths">
+                        <div class="tooltip">
+                            <img phx-click="start_edit_picture_url" phx-target={@myself} src={@artist.picture_url}
+                                alt="">
+                            <span class="tooltiptext">Press to edit</span>
+                        </div>
+                    </div>
+                    <div class="column has-text-centered is-centered">
+                        <h1 class="title"><%=@artist.name%></h1>
+                        <h1 class="subtitle">Age: <%=@artist.age%></h1>
+                        <h1 class="subtitle" style="margin-top: -1.25rem">Birthday: <%=@artist.birthday%></h1>
+                    </div>
+                </div>
+                <%= if @edit_picture_url do %>
+                <div class="is-flex is-justify-content-flex-end">
+                    <button class="button is-ghost is-pulled-right" form="editForm">save</button>
+                </div>
+                <div class="control">
+                    <div class="field">
+                        <%=content_tag(:input, class: "input", type: "url", name: "picture_url", form: "editForm", value: @artist.picture_url) do end%>
+                    </div>
+                </div>
+                <% end %>
+                <div class="is-flex is-justify-content-space-between">
+                    <h1 class="title is-4">Description</h1>
+                    <%= if @edit_description do%>
+                    <button class="button is-ghost is-pulled-right" form="editForm">save</button>
+                    <%else %>
+                    <%=content_tag(:button, class: "button is-ghost is-pulled-right", phx_click: "start_edit_descripton", phx_target: @myself, disabled: !@logged_in?) do "edit" end %>
+
+                    <%end %>
+                </div>
+                <div class="control">
+                    <%=content_tag(:textarea, class: "textarea", name: "description", rows: 10, readonly: !@edit_description, form: "editForm") do @artist.description end%>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-fullwidth is-rounded is-link is-light" phx-click="close_artist_information"
+                    phx-target="#artists_table">
+                    Close
+                </button>
+            </footer>
+        </div>
     </div>
 </div>

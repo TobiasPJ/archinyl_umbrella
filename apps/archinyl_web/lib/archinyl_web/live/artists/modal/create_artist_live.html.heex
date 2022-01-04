@@ -1,15 +1,77 @@
-<div id={@id} class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <header class="modal-card-head">
-            <p class="modal-card-title">Modal title</p>
-        </header>
-        <section class="modal-card-body">
-            <!-- Content ... -->
-        </section>
-        <footer class="modal-card-foot">
-            <button class="button is-success">Save changes</button>
-            <button class="button">Cancel</button>
-        </footer>
+<div id={@id}>
+    <form id="artistForm" method="post" phx-submit="create_artist" phx-target={@myself}></form>
+
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Create a new artist</p>
+            </header>
+            <section class="modal-card-body">
+                <form phx-target={@myself} phx-change="update_artist_name" style="margin-bottom: 0.5em">
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <input class="input" name="name" type="text" value={@name} placeholder="Name of artist">
+                        </div>
+                        <div class="control">
+                            <button class="button is-info" phx-target={@myself} phx-click="get_artist_information"
+                                type="button">
+                                Get artist information
+                            </button>
+                        </div>
+
+                    </div>
+                    <%= if @is_error and @error_type == :artist_exists do%>
+                    <p class="help is-danger" style="margin-top: -1.5rem">This artist alredy exists</p>
+                    <%end %>
+                </form>
+                <div class="field">
+                    <label class="label">Birthday</label>
+                    <div class="control">
+                        <input class="input" name="birthday" type="date" form="artistForm" required>
+                    </div>
+                </div>
+
+                <div class="picture-field">
+                    <div class="field">
+                        <label class="label">Artist picture url</label>
+                        <div class="control">
+                            <input class="input" name="picture_url" type="url" form="artistForm" value={@picture_url}>
+                        </div>
+                    </div>
+                    <div class="preview-picture">
+                        <img src={@picture_url} alt="">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Gender</label>
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" name="gender" value="female" form="artistForm" checked>
+                            Female
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="gender" value="male" form="artistForm">
+                            Male
+                        </label>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <textarea class="textarea" name="description" form="artistForm"
+                            value={@description}><%=@description%></textarea>
+                    </div>
+                </div>
+
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success is-fullwidth" form="artistForm">Submit</button>
+                <button class="button is-fullwidth" type="button" phx-click="close_create_artist_modal"
+                    phx-target="#artists_table">Cancel</button>
+            </footer>
+        </div>
     </div>
+
 </div>

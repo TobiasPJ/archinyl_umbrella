@@ -1,90 +1,16 @@
+<% alias ArchinylWeb.Artists.LibraryTableLive %>
+
 <%=if assigns[:user_id] do%>
-
-
-
-<div class="block">
-  <div class="is-flex is-justify-content-space-between">
-    <form phx-change="search_collection" style="width: 30%">
-      <div class="field">
-        <div class="control has-icons-left">
-          <%=Tag.content_tag(:input, class: "input is-normal", name: "search_term", type: "text") do end%>
-          <span class="icon is-small is-left">
-            <i class="fas fa-search"></i>
-          </span>
-        </div>
-      </div>
-    </form>
-    <div>
-      <div class="control">
-        <button class="button is-primary is-pulled-right" phx-click="open_add_collection_modal">Add collection</button>
-      </div>
+<%= live_component(%{module: LibraryTableLive, id: "collections_table", search_term: @search_term, user_id: @user_id}) %>
+<%else %>
+<div class="container">
+  <article class="message is-danger">
+    <div class="message-header">
+      <p>Danger</p>
     </div>
-  </div>
-
-  <div class="block">
-    <div class="columns is-multiline">
-      <%= for collection <- @collections do%>
-      <div class="column is-one-quarter">
-        <article class="panel is-info">
-          <p class="panel-heading has-text-centered">
-            <%=collection.name %>
-          </p>
-          <div class="panel-block">
-            <button class="button is-link is-outlined is-fullwidth" phx-click="go_to_collection" value={collection.id}>
-              Open
-            </button>
-          </div>
-        </article>
-      </div>
-      <%end %>
+    <div class="message-body">
+      You are not logged in please log in to see your collections
     </div>
-  </div>
-
-
-
-  <%=if @add_collection_modal do %>
-  <div class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head" style="margin-bottom: 0">
-        <p class="modal-card-title">Add collection</p>
-      </header>
-      <section class="modal-card-body">
-        <form phx-submit="create_collection">
-          <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-              <input class="input" type="text" name="name">
-            </div>
-          </div>
-          <div class="field is-grouped">
-            <div class="control">
-              <button class="button is-link">Submit</button>
-            </div>
-            <div class="control">
-              <button class="button is-link is-light" type="button"
-                phx-click="close_add_collection_modal">Cancel</button>
-            </div>
-          </div>
-
-        </form>
-      </section>
-    </div>
-  </div>
-  <%end%>
-  <%else %>
-
-
-
-
-  <div class="container">
-    <article class="message is-danger">
-      <div class="message-header">
-        <p>Danger</p>
-      </div>
-      <div class="message-body">
-        You are not logged in please log in to see your collections
-      </div>
-    </article>
-  </div>
-  <%end %>
+  </article>
+</div>
+<%end %>

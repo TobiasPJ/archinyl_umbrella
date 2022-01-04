@@ -24,10 +24,19 @@
                     </tbody>
                 </table>
             </div>
+            <div class="block">
+                <div class="media">
+                    <div class="media-left">
+                        <iframe src={@record.embed_link} width="600" height="380" frameborder="0"
+                            allowtransparency="true" allow="encrypted-media">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
         </section>
         <footer class="modal-card-foot">
-            <button class="button is-fullwidth is-rounded is-link is-light" phx-click="close_record_information"
-                phx-target="#records_table">
+            <button class="button is-fullwidth is-rounded is-link is-light" phx-click="call_close_record_information"
+                phx-target={@myself}>
                 Close
             </button>
         </footer>

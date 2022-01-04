@@ -2,6 +2,7 @@ defmodule ArchinylWeb.CollectionLive do
   use ArchinylWeb, :live_view
 
   alias Archinyl.Schema.Collection
+  alias ArchinylWeb.Collection.CollectionTableLive
 
   @default_assigns [
     collection: %Collection{}
@@ -25,13 +26,13 @@ defmodule ArchinylWeb.CollectionLive do
               {:ok, socket}
 
             collection_id ->
-              collection = Archinyl.get_collection(collection_id)
+              Phoenix.PubSub.subscribe(Archinyl.PubSub, "collection:#{collection_id}")
 
               socket =
                 socket
                 |> assign(@default_assigns)
                 |> assign(user_id: user_id)
-                |> assign(collection: collection)
+                |> assign(collection_id: collection_id)
 
               {:ok, socket}
           end
@@ -39,5 +40,21 @@ defmodule ArchinylWeb.CollectionLive do
     else
       {:ok, assign(socket, @default_assigns)}
     end
+  end
+
+  @impl true
+  def handle_info(:added_record, socket) do
+    send_update(CollectionTableLive, id: "collection_table")
+    {:noreply, socket}
+  end
+
+  def handle_info(:record_removed, socket) do
+    send_update(CollectionTableLive, id: "collection_table")
+    {:noreply, socket}
+  end
+
+  def handle_info(:close_record_inforamtion_modal, socket) do
+    send_update(CollectionTableLive, id: "collection_table", show_record_information: false)
+    {:noreply, socket}
   end
 end

@@ -1,0 +1,48 @@
+<div id={@id}>
+    <% alias ArchinylWeb.Library.Modal.CreateCollectionLive %>
+    <div class="block">
+        <div class="is-flex is-justify-content-space-between">
+            <form phx-change="search_collection" phx-target={@myself} style="width: 30%">
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <%=content_tag(:input, class: "input is-normal", name: "search_term", type: "text") do end%>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <div class="control">
+                    <button class="button is-primary is-pulled-right" phx-click="open_add_collection_modal"
+                        phx-target={@myself}>Add
+                        collection</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="columns is-multiline">
+                <%= for collection <- @collections do%>
+                <div class="column is-one-quarter">
+                    <article class="panel is-info">
+                        <p class="panel-heading has-text-centered">
+                            <%=collection.name %>
+                        </p>
+                        <div class="panel-block">
+                            <button class="button is-link is-outlined is-fullwidth" phx-click="go_to_collection"
+                                phx-target={@myself} value={collection.id}>
+                                Open
+                            </button>
+                        </div>
+                    </article>
+                </div>
+                <%end %>
+            </div>
+        </div>
+    </div>
+
+    <%=if @add_collection_modal do%>
+    <.live_component module={CreateCollectionLive} id="create_collection_modal" library_id={@library_id} />
+    <% end %>
+</div>

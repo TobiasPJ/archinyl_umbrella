@@ -1,0 +1,28 @@
+<div id={@id}>
+  <form id="collectionForm" method="post" phx-submit="create_collection" phx-target={@myself}></form>
+
+  <div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head" style="margin-bottom: 0">
+        <p class="modal-card-title">Add collection</p>
+      </header>
+
+      <section class="modal-card-body">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input class="input" type="text" name="name" form="collectionForm">
+          </div>
+        </div>
+      </section>
+
+      <footer class="modal-card-foot">
+        <button class="button is-link" form="collectionForm">Submit</button>
+        <button class="button is-link is-light" type="button" phx-click="close_add_collection_modal"
+          phx-target="#collections_table">Cancel</button>
+      </footer>
+    </div>
+  </div>
+
+</div>

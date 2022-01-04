@@ -6,7 +6,7 @@
              onkeydown="return event.key != 'Enter';">
              <div class="field">
                  <div class="control has-icons-left">
-                     <%=content_tag(:input, class: "input is-normal", name: "search_term", type: "text", value: @search_term) do end%>
+                     <%=content_tag(:input, class: "input is-normal", name: "search", type: "text", value: @search) do end%>
                      <span class="icon is-small is-left">
                          <i class="fas fa-search"></i>
                      </span>
@@ -23,7 +23,8 @@
          <%= for artist <- @artists do%>
 
          <div class="column is-one-quarter">
-             <div class="card" phx-click="open_artist_information" phx-target={@myself} phx-value-artist_id={artist.id}>
+             <div class="card is-clickable" phx-click="open_artist_information" phx-target={@myself}
+                 phx-value-artist_id={artist.id}>
                  <div class="card-image">
                      <figure class="image is-3by3">
                          <img src={artist.picture_url} alt="">
@@ -38,7 +39,7 @@
                      </div>
 
                      <div class="content">
-                         <%=artist.description %>
+                         <p class="card-description"><%=artist.description %></p>
                      </div>
                  </div>
              </div>
@@ -52,6 +53,7 @@
      <% end %>
 
      <%=if @artist_information do%>
-     <.live_component module={ArtistInformationLive} id="artist_information_modal" artist={@artist} />
+     <.live_component module={ArtistInformationLive} id="artist_information_modal" artist={@artist}
+         logged_in?={@logged_in?} />
      <% end %>
  </div>

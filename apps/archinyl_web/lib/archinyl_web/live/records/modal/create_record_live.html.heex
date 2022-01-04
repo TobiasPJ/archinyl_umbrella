@@ -1,6 +1,7 @@
 <div id={@id}>
     <form id="recordForm" method="post" phx-submit="create_record" phx-target={@myself}></form>
     <form id="songForm" method="post" phx-submit="add_song_to_record" phx-target={@myself}></form>
+    <form id="record_name_form" method="post" phx-change="set_album_search_value" phx-target={@myself}></form>
     <div class="modal is-active">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -11,13 +12,24 @@
 
 
                 <div style="margin-bottom: 0">
-                    <div class="field">
-                        <label class="label">Title</label>
-                        <div class="control">
-                            <input class="input" type="text" name="title" form="recordForm" phx-update="ignore">
+
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="title" placeholder="Enter title of record"
+                                value={@album_title} form="record_name_form">
                         </div>
+                        <div class="control">
+                            <button class="button is-info" phx-target={@myself} phx-click="search_record">
+                                Find record
+                            </button>
+                        </div>
+
                     </div>
-                    <div class="field">
+                    <%= if @is_error and @error_type == :record_name do%>
+                    <p class="help is-danger" style="margin-top: -1.5rem">This record does not exist</p>
+                    <%end %>
+
+                    <div class=" field">
                         <label class="label">Artist</label>
                         <div class="control">
                             <div class="select">
@@ -29,18 +41,26 @@
                                 </select>
                             </div>
                         </div>
+                        <%= if @is_error and @error_type == :artist_id do%>
+                        <p class="help is-danger">Must choose a artist, if the artist does not exsist you can add it</p>
+                        <%end %>
                     </div>
-                    <div class="field">
-                        <label class="label">Cover url</label>
-                        <div class="control">
-                            <input class="input" type="url" name="cover_url" form="recordForm" phx-update="ignore">
+                    <div class="picture-field">
+                        <div class="field">
+                            <label class="label">Cover url</label>
+                            <div class="control">
+                                <input class="input" type="url" name="cover_url" form="recordForm" phx-update="ignore"
+                                    value={@image_url}>
+                            </div>
+                        </div>
+                        <div class="preview-picture">
+                            <img src={@image_url} alt="">
                         </div>
                     </div>
-
                     <div class="field is-grouped">
                         <div class="control">
                             <label class="label">Song title</label>
-                            <%=content_tag(:input, class: "input", type: "text", name: "song_title", form: "songForm") do end%>
+                            <%=content_tag(:input, class: "input", type: "text", name: "title", form: "songForm") do end%>
                         </div>
                         <div class="control">
                             <label class="label">Runtime</label>
@@ -78,10 +98,12 @@
                 </div>
             </section>
             <footer class="modal-card-foot">
-                <button class="button is-link" form="recordForm">Add</button>
-                <button class="button is-link is-light" type="button" phx-click="close_add_record_modal"
+                <button class="button is-link is-fullwidth" form="recordForm">Add</button>
+                <button class="button is-link is-light is-fullwidth" type="button" phx-click="close_add_record_modal"
                     phx-target="#records_table">Cancel</button>
             </footer>
         </div>
     </div>
+
+
 </div>

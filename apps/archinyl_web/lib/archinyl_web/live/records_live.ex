@@ -1,8 +1,6 @@
 defmodule ArchinylWeb.RecordsLive do
   use ArchinylWeb, :live_view
 
-  alias Phoenix.HTML.Tag
-  alias Archinyl.Schema.Song
   alias ArchinylWeb.Records.RecordTableLive
 
   @default_assigns [
@@ -38,6 +36,11 @@ defmodule ArchinylWeb.RecordsLive do
   @impl true
   def handle_info({:new_record, record}, socket) do
     send_update(RecordTableLive, id: "records_table", new_record: record)
+    {:noreply, socket}
+  end
+
+  def handle_info(:close_record_inforamtion_modal, socket) do
+    send_update(RecordTableLive, id: "records_table", show_record_information: false)
     {:noreply, socket}
   end
 
