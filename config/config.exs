@@ -30,12 +30,12 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :archinyl, Archinyl.Spotify.Auth,
-  client_id: "05877e9b80904a309fc8006c846b555c",
-  client_secret: "934b13f652c14f2ba7d153a9d2bba9f4"
+  client_id: System.fetch_env!("SPOTIFY_CLIENT_ID"),
+  client_secret: System.fetch_env!("SPOTIFY_CLIENT_SECRET")
 
 config :archinyl, Archinyl.LastFM.Request,
-  api_key: "646bd891ae12c15453636f5856b0d49c",
-  shared_secret: "3a725254e9374bbd672f4616a8b161c5"
+  api_key: System.fetch_env!("LASTFM_API_KEY"),
+  shared_secret: System.fetch_env!("LASTFM_SHARED_SECRET")
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
