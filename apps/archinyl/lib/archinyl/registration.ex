@@ -9,8 +9,10 @@ defmodule Archinyl.Registration do
       |> put_change(:password, hashed_password(changeset.params["noenc_password"]))
       |> repo.insert()
 
-    Archinyl.Repo.insert_library(%Library{user_id: user.id})
-    {:ok, user}
+    case Archinyl.Repo.insert_library(%Library{user_id: user.id}) do
+      {:ok, _} -> {:ok, user}
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   defp hashed_password(password) do

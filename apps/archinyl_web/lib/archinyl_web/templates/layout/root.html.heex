@@ -13,24 +13,11 @@
   <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/js/app.js" )}></script>
   <link href="./jquery.minipreview.css" rel="stylesheet">
   <script src="./jquery.minipreview.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $('#p1 a').miniPreview({
-        prefetch: 'pageload'
-      });
-      $('#p2 a').miniPreview({
-        prefetch: 'parenthover'
-      });
-      $('#p3 a').miniPreview({
-        prefetch: 'none'
-      });
-    });
-  </script>
   <script src="https://rawgit.com/shaneapen/Image-Preview-for-Links/master/image_preview_for_links.js"></script>
 </head>
 
 <body>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <nav class="navbar has-background-primary-light" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
         <img src={Routes.static_path(@conn, "/images/archinyl_logo.png" )} width="60" height="50">
@@ -45,55 +32,58 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item is-uppercase has-text-weight-bold">
-          <%= live_patch to: Routes.static_path(@conn, "/library"), class: "navbar-item" do %>
-          <span class="icon-text">
-            <span class="icon has-text-info">
-              <i class="fas fa-archive"></i>
-            </span>
-            <span>Library</span>
-          </span>
-          <% end %>
-        </a>
 
-        <a class="navbar-item is-uppercase has-text-weight-bold">
-          <%= live_patch to: Routes.static_path(@conn, "/records"), class: "navbar-item" do %>
-          <span class="icon-text">
-            <span class="icon has-text-info">
-              <i class="fas fa-record-vinyl"></i>
-            </span>
-            <span>Records</span>
+        <%= live_patch to: Routes.static_path(@conn, "/library"), class: "navbar-item" do %>
+        <span class="icon-text">
+          <span class="icon has-text-info">
+            <i class="fas fa-archive"></i>
           </span>
-          <% end %>
-        </a>
+          <span>Library</span>
+        </span>
+        <% end %>
 
-        <a class="navbar-item is-uppercase has-text-weight-bold">
-          <%= live_patch to: Routes.static_path(@conn, "/artists"), class: "navbar-item" do %>
-          <span class="icon-text">
-            <span class="icon has-text-info">
-              <i class="fas fa-users"></i>
-            </span>
-            <span>Artists</span>
+        <%= live_patch to: Routes.static_path(@conn, "/records"), class: "navbar-item" do %>
+        <span class="icon-text">
+          <span class="icon has-text-info">
+            <i class="fas fa-record-vinyl"></i>
           </span>
-          <% end %>
-        </a>
+          <span>Records</span>
+        </span>
+        <% end %>
+
+        <%= live_patch to: Routes.static_path(@conn, "/artists"), class: "navbar-item" do %>
+        <span class="icon-text">
+          <span class="icon has-text-info">
+            <i class="fas fa-users"></i>
+          </span>
+          <span>Artists</span>
+        </span>
+        <% end %>
+
       </div>
+
+
       <div class="navbar-end">
         <%= if logged_in?(@conn) do %>
-        <a class="navbar-item">
-          <p><%= current_user(@conn).email %></p>
-        </a>
-        <a class="navbar-item">
-          <%=button("Logout", to: Routes.session_path(@conn, :delete), method: :delete, class: "button is-small") %>
-        </a>
-        <% else %>
-        <a class="navbar-item">
-          <%= button("Login", to: "/login", method: :get, class: "button is-small")%>
-        </a>
-        <a class="navbar-item">
-          <%= button("Register", to: Routes.registration_path(@conn, :new), method: :get, class: "button is-small")%>
-        </a>
-        <% end %>
+
+        <div class="navbar-item">
+          <div class="buttons">
+            <%=link(current_user(@conn).email, to: Routes.static_path(@conn, "/user"), class: "button") %>
+
+
+            <%=link("Logout", to: Routes.session_path(@conn, :delete), method: :delete, class: "button is-danger") %>
+          </div>
+        </div>
+        <%else%>
+        <div class="navbar-item">
+          <div class="buttons">
+            <%= link("Login", to: "/login", method: :get, class: "button is-link")%>
+            <%= link("Register", to: Routes.registration_path(@conn, :new), method: :get, class: "button is-link is-light")%>
+          </div>
+        </div>
+
+        <%end %>
+
       </div>
     </div>
   </nav>

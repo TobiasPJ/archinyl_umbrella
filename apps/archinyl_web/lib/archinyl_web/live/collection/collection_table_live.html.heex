@@ -1,59 +1,43 @@
-<div class="block" id={@id}>
-    <div class="container">
-        <div class="block">
-            <nav class="level">
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Records in collection</p>
-                        <p class="title"><%=@record_count%></p>
-                    </div>
-                </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Most frequent artist</p>
-                        <p class="title"><%=@most_freq_artist%></p>
-                    </div>
-                </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Total runtime</p>
-                        <p class="title"><%=@total_runtime%></p>
-                    </div>
-                </div>
-            </nav>
-        </div>
-        <div class="columns is-multiline">
-            <%= for record <- @collection.records do%>
-
-            <div class="column is-one-quarter">
-
-                <div class="card has-background-primary-light">
-                    <div class="card-image">
-                        <figure class="image is-3by3">
-                            <div class="tooltip">
-                                <img src={record.logo_url} alt="">
-                                <div class="tooltip-two-buttons">
-                                    <button class="button is-rounded is-link tooltipbutton" phx-target={@myself}
-                                        phx-click="view_record_information" value={record.id}>View</button>
-                                    <button class="button is-rounded is-danger tooltipbutton" phx-target={@myself}
-                                        phx-click="remove_record_from_collection" value={record.id}>Remove</button>
-                                </div>
-                            </div>
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="content has-text-centered has-text-info-dark has-text-weight-semibold">
-                            <%=record.title %>
-                            <br>
-                            <%=record.artist.name %>
-                        </div>
-                    </div>
+<div id={@id} class="container">
+    <div class="block">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Records in collection</p>
+                    <p class="title"><%=@record_count%></p>
                 </div>
             </div>
-            <%end %>
-        </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Most frequent artist</p>
+                    <p class="title"><%=@most_freq_artist%></p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Total runtime</p>
+                    <p class="title"><%=@total_runtime%></p>
+                </div>
+            </div>
+        </nav>
     </div>
-    <%= if @show_record_information do %>
-    <%= live_component(%{module: ArchinylWeb.Records.Modal.RecordInformationLive, id: "record_information_modal_from_collection_table", record: @record, caller: @self}) %>
+    <div class="tabs is-boxed">
+        <ul>
+            <li class={@record_view_class} phx-click="switch_view" phx-target={@myself} phx-value-view="record">
+                <a>Record view</a>
+            </li>
+            <li class={@song_view_class} phx-click="switch_view" phx-target={@myself} phx-value-view="song">
+                <a>Song view</a>
+            </li>
+        </ul>
+    </div>
+
+    <%=if @record_view do%>
+    <%=live_component(%{module: ArchinylWeb.Collection.CollectionViews.RecordViewLive, id: "record_view_live", collection: @collection})%>
     <%end %>
+
+    <%=if @song_view do%>
+    <%=live_component(%{module: ArchinylWeb.Collection.CollectionViews.SongViewLive, id: "song_view_live", collection: @collection})%>
+    <%end %>
+
 </div>

@@ -71,13 +71,11 @@ defmodule Archinyl.Repo do
     |> update()
   end
 
-  def insert_artist(name, birthday, sex, picture_url, description) do
+  def insert_artist(name, picture_url, description) do
     artist = %Artist{}
 
     params = %{
       name: name,
-      birthday: birthday,
-      sex: sex,
       picture_url: picture_url,
       description: description
     }
@@ -168,9 +166,9 @@ defmodule Archinyl.Repo do
     |> preload(:collections)
   end
 
-  def get_user(email) do
+  def get_user(id) do
     User
-    |> get_by(email: email)
+    |> get_by(id: id)
   end
 
   def get_artists(search_term, limit, offset) do
@@ -196,11 +194,11 @@ defmodule Archinyl.Repo do
     |> all()
   end
 
-  def check_if_artist_exist(name, birthday) do
+  def check_if_artist_exist(name) do
     term = "%#{String.downcase(name)}%"
 
     Artist
-    |> where([a], fragment("like(lower(?), ?)", a.name, ^term) and a.birthday == ^birthday)
+    |> where([a], fragment("like(lower(?), ?)", a.name, ^term))
     |> exists?()
   end
 

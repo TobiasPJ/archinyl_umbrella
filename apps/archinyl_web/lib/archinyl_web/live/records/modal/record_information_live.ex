@@ -13,9 +13,23 @@ defmodule ArchinylWeb.Records.Modal.RecordInformationLive do
 
   @impl true
   def handle_event("call_close_record_information", _params, socket) do
-    caller = socket.assigns.caller
-    Process.send(caller, :close_record_inforamtion_modal, [:noconnect])
+    close_modal(socket)
 
     {:noreply, socket}
+  end
+
+  def handle_event("escape_keyup", %{"key" => "Escape"}, socket) do
+    close_modal(socket)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("escape_keyup", _, socket) do
+    {:noreply, socket}
+  end
+
+  defp close_modal(socket) do
+    caller = socket.assigns.caller
+    Process.send(caller, :close_record_inforamtion_modal, [:noconnect])
   end
 end

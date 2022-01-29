@@ -25,12 +25,7 @@
                     <p class="help is-danger" style="margin-top: -1.5rem">This artist alredy exists</p>
                     <%end %>
                 </form>
-                <div class="field">
-                    <label class="label">Birthday</label>
-                    <div class="control">
-                        <input class="input" name="birthday" type="date" form="artistForm" required>
-                    </div>
-                </div>
+
 
                 <div class="picture-field">
                     <div class="field">
@@ -43,19 +38,7 @@
                         <img src={@picture_url} alt="">
                     </div>
                 </div>
-                <div class="field">
-                    <label class="label">Gender</label>
-                    <div class="control">
-                        <label class="radio">
-                            <input type="radio" name="gender" value="female" form="artistForm" checked>
-                            Female
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="gender" value="male" form="artistForm">
-                            Male
-                        </label>
-                    </div>
-                </div>
+
 
                 <div class="field">
                     <label class="label">Description</label>

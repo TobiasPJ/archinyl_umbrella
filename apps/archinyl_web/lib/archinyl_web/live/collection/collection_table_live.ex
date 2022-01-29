@@ -2,17 +2,18 @@ defmodule ArchinylWeb.Collection.CollectionTableLive do
   use ArchinylWeb, :live_component
 
   @default_assigns [
-    show_record_information: false
+    record_view: true,
+    song_view: false,
+    record_view_class: "is-active",
+    song_view_class: ""
   ]
+
   @impl true
   def mount(socket) do
     {:ok, assign(socket, self: self())}
   end
 
   @impl true
-  def update(%{show_record_information: val}, socket) do
-    {:ok, assign(socket, record: nil, show_record_information: val)}
-  end
 
   def update(assigns, socket) do
     socket =
@@ -28,25 +29,27 @@ defmodule ArchinylWeb.Collection.CollectionTableLive do
   end
 
   @impl true
-  def handle_event("remove_record_from_collection", %{"value" => record_id}, socket) do
-    case Archinyl.remove_record_from_collection(socket.assigns.collection, record_id) do
-      {:ok, _collecion} ->
-        Phoenix.PubSub.broadcast!(
-          Archinyl.PubSub,
-          "collection:#{socket.assigns.collection.id}",
-          :record_removed
-        )
+  def handle_event("switch_view", %{"view" => view}, socket) do
+    socket =
+      case view do
+        "song" ->
+          assign(socket,
+            song_view: true,
+            record_view: false,
+            record_view_class: "",
+            song_view_class: "is-active"
+          )
 
-        {:noreply, socket}
+        "record" ->
+          assign(socket,
+            song_view: false,
+            record_view: true,
+            record_view_class: "is-active",
+            song_view_class: ""
+          )
+      end
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, error: changeset.errors)}
-    end
-  end
-
-  def handle_event("view_record_information", %{"value" => record_id}, socket) do
-    record = Archinyl.get_record(record_id)
-    {:noreply, assign(socket, record: record, show_record_information: true)}
+    {:noreply, socket}
   end
 
   defp get_collection(socket) do
@@ -64,25 +67,21 @@ defmodule ArchinylWeb.Collection.CollectionTableLive do
     case Map.values(artists_freq) do
       [_ | _] = f ->
         max_freq = Enum.max(f)
-        artist = Enum.find(artists_freq, fn {_key, value} -> value == max_freq end) |> elem(0)
+        {artist, _} = Enum.find(artists_freq, fn {_key, value} -> value == max_freq end)
 
         assign(socket, most_freq_artist: artist)
 
-      [] ->
+      _ ->
         assign(socket, most_freq_artist: nil)
     end
   end
 
   defp calc_total_playtime(socket) do
-    records = socket.assigns.collection.records
-
     total =
-      Enum.reduce(records, 0, fn record, acc ->
-        acc +
-          Enum.reduce(record.songs, 0, fn song, acc ->
-            acc + elem(Time.to_seconds_after_midnight(song.runtime), 0)
-          end)
-      end)
+      for record <- socket.assigns.collection.records, song <- record.songs do
+        elem(Time.to_seconds_after_midnight(song.runtime), 0)
+      end
+      |> Enum.sum()
       |> Time.from_seconds_after_midnight()
 
     assign(socket, total_runtime: total)

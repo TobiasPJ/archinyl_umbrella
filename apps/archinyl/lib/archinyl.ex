@@ -22,8 +22,8 @@ defmodule Archinyl do
     Repo.get_collection(collection_id)
   end
 
-  def insert_artist(name, birthday, sex, picture_url \\ "", description \\ "") do
-    Repo.insert_artist(name, birthday, sex, picture_url, description)
+  def insert_artist(name, picture_url \\ "", description \\ "") do
+    Repo.insert_artist(name, picture_url, description)
   end
 
   def get_records(search_term, limit, offset) do
@@ -67,8 +67,8 @@ defmodule Archinyl do
     Repo.get_artist(id)
   end
 
-  def check_if_artist_exist(name, birthday) do
-    Repo.check_if_artist_exist(name, birthday)
+  def check_if_artist_exist(name) do
+    Repo.check_if_artist_exist(name)
   end
 
   def update_artist(artist_id, new_data) do

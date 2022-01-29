@@ -15,15 +15,6 @@ defmodule ArchinylWeb.Artists.Modal.ArtistInformationLive do
   def update(assigns, socket) do
     artist = Archinyl.get_artist(assigns.artist)
 
-    age =
-      DateTime.utc_now()
-      |> DateTime.to_date()
-      |> Date.diff(artist.birthday)
-      |> Kernel.div(365)
-      |> floor()
-
-    artist = Map.put(artist, :age, age)
-
     socket =
       socket
       |> assign(@default_assigns)

@@ -3,6 +3,7 @@ defmodule ArchinylWeb.CollectionLive do
 
   alias Archinyl.Schema.Collection
   alias ArchinylWeb.Collection.CollectionTableLive
+  alias ArchinylWeb.Collection.CollectionViews.RecordViewLive
 
   @default_assigns [
     collection: %Collection{}
@@ -54,7 +55,7 @@ defmodule ArchinylWeb.CollectionLive do
   end
 
   def handle_info(:close_record_inforamtion_modal, socket) do
-    send_update(CollectionTableLive, id: "collection_table", show_record_information: false)
+    send_update(RecordViewLive, id: "record_view_live", show_record_information: false)
     {:noreply, socket}
   end
 end

@@ -30,6 +30,7 @@ defmodule ArchinylWeb.Router do
     live "/collection", CollectionLive, :collection
     live "/records", RecordsLive, :record
     live "/artists", ArtistsLive, :artist
+    live "/user", UserLive, :user
 
     resources "/registration", RegistrationController, only: [:new, :create]
     get "/login", SessionController, :new

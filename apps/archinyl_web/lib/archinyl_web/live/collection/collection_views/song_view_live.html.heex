@@ -1,0 +1,15 @@
+<div class="block" id={@id}>
+    <table class="table is-striped">
+        <tbody>
+            <%= for record <- @collection.records do%>
+            <%= for song <- record.songs do%>
+            <tr>
+                <td><img class="record-logo" src={record.logo_url} alt=""></td>
+                <td><%=song.title%></td>
+                <td><%=song.runtime%></td>
+            </tr>
+            <% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>

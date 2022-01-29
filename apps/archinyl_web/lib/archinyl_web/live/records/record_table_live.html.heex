@@ -49,7 +49,9 @@
                 <%end %>
             </tbody>
         </table>
-        <%= ArchinylWeb.Components.Pagination.pagination(@myself, @page_number, @number_of_pages, @total_count, "record", "records")%>
+        <ArchinylWeb.Components.Pagination.pagination target={@myself} page_number={@page_number}
+            number_of_pages={@number_of_pages} total_count={@total_count} type_singular="record"
+            type_plural="records" />
     </div>
 
     <%= if @add_record_modal do %>

@@ -42,18 +42,16 @@ defmodule ArchinylWeb.Artists.Modal.CreateArtistLive do
         "create_artist",
         %{
           "description" => description,
-          "gender" => gender,
-          "picture_url" => picture_url,
-          "birthday" => birthday
+          "picture_url" => picture_url
         },
         socket
       ) do
     name = socket.assigns[:name]
 
-    if Archinyl.check_if_artist_exist(name, birthday) do
+    if Archinyl.check_if_artist_exist(name) do
       {:noreply, assign(socket, is_error: true, error_type: :artist_exists)}
     else
-      {:ok, artist} = Archinyl.insert_artist(name, birthday, gender, picture_url, description)
+      {:ok, artist} = Archinyl.insert_artist(name, picture_url, description)
 
       Phoenix.PubSub.broadcast!(
         Archinyl.PubSub,

@@ -15,37 +15,21 @@ defmodule ArchinylWeb.Artists.ArtistTableLive do
       socket
       |> assign(@default_assigns)
       |> get_artists()
-      |> calculate_age()
 
     {:ok, socket}
   end
 
   @impl true
   def update(%{new_description_for: _id}, socket) do
-    socket =
-      socket
-      |> get_artists()
-      |> calculate_age()
-
-    {:ok, socket}
+    {:ok, get_artists(socket)}
   end
 
   def update(%{new_picture_url: _id}, socket) do
-    socket =
-      socket
-      |> get_artists()
-      |> calculate_age()
-
-    {:ok, socket}
+    {:ok, get_artists(socket)}
   end
 
   def update(%{new_artist: _artist}, socket) do
-    socket =
-      socket
-      |> get_artists()
-      |> calculate_age()
-
-    {:ok, socket}
+    {:ok, get_artists(socket)}
   end
 
   def update(assigns, socket) do
@@ -53,7 +37,6 @@ defmodule ArchinylWeb.Artists.ArtistTableLive do
       socket
       |> assign(assigns)
       |> get_artists()
-      |> calculate_age()
 
     {:ok, socket}
   end
@@ -115,23 +98,5 @@ defmodule ArchinylWeb.Artists.ArtistTableLive do
       total_count: total_count,
       number_of_pages: ceil(total_count / limit)
     )
-  end
-
-  defp calculate_age(socket) do
-    artists = socket.assigns[:artists]
-
-    artists =
-      Enum.map(artists, fn artist ->
-        age =
-          DateTime.utc_now()
-          |> DateTime.to_date()
-          |> Date.diff(artist.birthday)
-          |> Kernel.div(365)
-          |> floor()
-
-        Map.put(artist, :age, age)
-      end)
-
-    assign(socket, artists: artists)
   end
 end
