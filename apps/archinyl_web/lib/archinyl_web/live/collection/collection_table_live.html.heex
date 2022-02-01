@@ -1,10 +1,17 @@
 <div id={@id} class="container">
+    <%= if @collection_id do%>
     <div class="block">
         <nav class="level">
             <div class="level-item has-text-centered">
                 <div>
                     <p class="heading">Records in collection</p>
                     <p class="title"><%=@record_count%></p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Songs in collection</p>
+                    <p class="title"><%=@song_count%></p>
                 </div>
             </div>
             <div class="level-item has-text-centered">
@@ -33,11 +40,11 @@
     </div>
 
     <%=if @record_view do%>
-    <%=live_component(%{module: ArchinylWeb.Collection.CollectionViews.RecordViewLive, id: "record_view_live", collection: @collection})%>
+    <%=live_component(%{module: ArchinylWeb.Collection.CollectionViews.RecordViewLive, id: "record_view_live", collection: @collection, logged_in?: @logged_in?})%>
     <%end %>
 
     <%=if @song_view do%>
     <%=live_component(%{module: ArchinylWeb.Collection.CollectionViews.SongViewLive, id: "song_view_live", collection: @collection})%>
     <%end %>
-
+    <%end %>
 </div>

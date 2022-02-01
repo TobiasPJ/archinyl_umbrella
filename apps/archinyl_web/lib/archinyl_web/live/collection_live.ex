@@ -17,26 +17,16 @@ defmodule ArchinylWeb.CollectionLive do
           {:ok, socket}
 
         user_id ->
-          case session["collection_id"] do
-            nil ->
-              socket =
-                socket
-                |> assign(@default_assigns)
-                |> assign(user_id: user_id)
+          collection_id = session["collection_id"]
+          Phoenix.PubSub.subscribe(Archinyl.PubSub, "collection:#{collection_id}")
 
-              {:ok, socket}
+          socket =
+            socket
+            |> assign(@default_assigns)
+            |> assign(user_id: user_id)
+            |> assign(collection_id: collection_id)
 
-            collection_id ->
-              Phoenix.PubSub.subscribe(Archinyl.PubSub, "collection:#{collection_id}")
-
-              socket =
-                socket
-                |> assign(@default_assigns)
-                |> assign(user_id: user_id)
-                |> assign(collection_id: collection_id)
-
-              {:ok, socket}
-          end
+          {:ok, socket}
       end
     else
       {:ok, assign(socket, @default_assigns)}

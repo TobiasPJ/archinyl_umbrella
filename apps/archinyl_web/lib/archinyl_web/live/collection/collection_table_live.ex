@@ -20,10 +20,18 @@ defmodule ArchinylWeb.Collection.CollectionTableLive do
       socket
       |> assign(assigns)
       |> assign(@default_assigns)
-      |> get_collection()
-      |> get_record_count()
-      |> get_most_frequent_artist()
-      |> calc_total_playtime()
+
+    socket =
+      if assigns.collection_id do
+        socket
+        |> get_collection()
+        |> get_record_count()
+        |> get_song_count()
+        |> get_most_frequent_artist()
+        |> calc_total_playtime()
+      else
+        socket
+      end
 
     {:ok, socket}
   end
@@ -85,5 +93,15 @@ defmodule ArchinylWeb.Collection.CollectionTableLive do
       |> Time.from_seconds_after_midnight()
 
     assign(socket, total_runtime: total)
+  end
+
+  defp get_song_count(socket) do
+    total_count =
+      for record <- socket.assigns.collection.records, _song <- record.songs do
+        ""
+      end
+      |> length()
+
+    assign(socket, song_count: total_count)
   end
 end

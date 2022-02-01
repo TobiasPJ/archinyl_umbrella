@@ -59,7 +59,7 @@
     <%end %>
 
     <%= if @show_record_information do %>
-    <%= live_component(%{module: RecordInformationLive, id: "record_information_modal", record: @record, caller: @self}) %>
+    <%= live_component(%{module: RecordInformationLive, id: "record_information_modal", record: @record, caller: @self, logged_in?: @logged_in?}) %>
     <%end %>
 
     <%= if @add_to_collection_modal do %>

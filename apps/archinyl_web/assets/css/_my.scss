@@ -227,3 +227,52 @@ table th:not([align]) {
 
 
 }
+
+.h-wrapper {
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    flex-direction: column;
+
+    .h-container {
+        background-color: white;
+        border-radius: 20px;
+        display: inline-block;
+        width: 35px;
+        height: 35px;
+        text-align: center;
+        line-height: 45px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    label {
+        margin-top: 6px;
+        text-align: center;
+        font-size: 10px;
+        line-height: normal;
+        width: auto;
+
+    }
+
+}
+
+#heart {
+    font-size: 25px;
+    appearance: none;
+    color: lightgray;
+
+    &:checked:not(:disabled),
+    &:hover:not(:checked):not(:disabled) {
+        color: red;
+    }
+
+    &:hover:checked:not(:disabled) {
+        color: lightgray;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+
+    }
+}

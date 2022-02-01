@@ -3,7 +3,7 @@ defmodule Archinyl.Repo do
     otp_app: :archinyl,
     adapter: Ecto.Adapters.Postgres
 
-  import Ecto.Query, only: [where: 3, limit: 2, offset: 2, order_by: 2]
+  import Ecto.Query, only: [where: 3, limit: 2, offset: 2, order_by: 2, select: 3]
 
   alias Archinyl.Schema.{
     User,
@@ -11,7 +11,8 @@ defmodule Archinyl.Repo do
     Collection,
     Record,
     Artist,
-    Song
+    Song,
+    Likes
   }
 
   def insert_user(user) do
@@ -97,6 +98,42 @@ defmodule Archinyl.Repo do
     song
     |> Song.changeset(params)
     |> insert()
+  end
+
+  def like_record(user_id, record_id) do
+    user = get_by(User, id: user_id)
+    record = get_by(Record, id: record_id)
+
+    user
+    |> preload(:likes)
+    |> User.like_record(record)
+    |> update()
+  end
+
+  def unlike_record(user_id, record_id) do
+    user = get_by(User, id: user_id)
+    record = get_by(Record, id: record_id)
+
+    user
+    |> preload(:likes)
+    |> User.unlike_record(record)
+    |> update()
+  end
+
+  def check_if_liked(user_id, record_id) do
+    result =
+      Likes
+      |> where([l], l.user_id == ^user_id and l.record_id == ^record_id)
+      |> one()
+
+    if result, do: true, else: false
+  end
+
+  def count_likes(record_id) do
+    Likes
+    |> where([l], l.record_id == ^record_id)
+    |> select([l], count(l))
+    |> one()
   end
 
   def insert_record_into_collection(collection_id, record) do

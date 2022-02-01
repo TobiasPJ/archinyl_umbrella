@@ -1,5 +1,5 @@
 <%=if assigns[:user_id] do%>
-<%= live_component(%{module: ArchinylWeb.Collection.CollectionTableLive, id: "collection_table", collection_id: @collection_id}) %>
+<%= live_component(%{module: ArchinylWeb.Collection.CollectionTableLive, id: "collection_table", collection_id: @collection_id, logged_in?: @user_id}) %>
 
 <%else %>
 <div class="container">

@@ -118,7 +118,6 @@ defmodule Archinyl do
        }}
     else
       [] ->
-        IO.inspect("in empty list")
         {:error, :does_not_exist}
 
       {:error, reason} ->

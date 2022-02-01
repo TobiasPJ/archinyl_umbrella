@@ -42,4 +42,8 @@ defmodule ArchinylWeb.Artists.LibraryTableLive do
   def handle_event("go_to_collection", %{"value" => collection_id}, socket) do
     {:noreply, redirect(socket, to: "/go_to_collection#{collection_id}")}
   end
+
+  def handle_event("search_collection", _params, socket) do
+    {:noreply, socket}
+  end
 end

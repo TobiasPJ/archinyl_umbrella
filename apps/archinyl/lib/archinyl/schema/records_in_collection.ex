@@ -20,5 +20,4 @@ defmodule Archinyl.Schema.RecordsInCollection do
     |> foreign_key_constraint(:record_id)
     |> foreign_key_constraint(:collection_id)
   end
-
 end

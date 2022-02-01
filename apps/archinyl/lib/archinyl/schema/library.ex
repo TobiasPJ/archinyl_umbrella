@@ -31,7 +31,6 @@ defmodule Archinyl.Schema.Library do
 
   def changeset_remove_collection(%Library{} = library, collection_id) do
     collection = Archinyl.Repo.get_by(Collection, id: collection_id)
-    IO.inspect(collection)
 
     library
     |> cast(%{}, @parameters)

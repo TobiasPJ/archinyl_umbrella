@@ -1,9 +1,11 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
+@import "../css/_my.scss";
+/* @import "../css/mystyles.sass"; */
 @import "../node_modules/bulma/bulma.sass";
 @import "../node_modules/@fortawesome/fontawesome-free/scss/solid.scss";
 @import "../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "../css/_my.scss";
+
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,

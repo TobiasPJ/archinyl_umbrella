@@ -29,6 +29,6 @@
     </div>
 
     <%= if @show_record_information do %>
-    <%= live_component(%{module: ArchinylWeb.Records.Modal.RecordInformationLive, id: "record_information_modal_from_collection_table", record: @record, caller: @self}) %>
+    <%= live_component(%{module: ArchinylWeb.Records.Modal.RecordInformationLive, id: "record_information_modal_from_collection_table", record: @record, caller: @self, logged_in?: @logged_in?}) %>
     <%end %>
 </div>

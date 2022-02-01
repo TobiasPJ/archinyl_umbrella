@@ -5,10 +5,18 @@
             <p class="modal-card-title"><%=@record.title%></p>
         </header>
         <section class="modal-card-body">
-            <div class="is-flex is-justify-content-center">
+            <div class="is-flex is-justify-content-space-evenly ">
                 <figure class="image is-220x220">
                     <img src={@record.logo_url} alt="">
                 </figure>
+
+                <div class="h-wrapper">
+                    <div class="h-container">
+                        <%=content_tag(:input, type: "checkbox", id: "heart", class: "fas fa-heart", phx_click: "like_record", phx_target: @myself, checked: @liked, disabled: !@logged_in?) do end%>
+                    </div>
+                    <label>Total likes <%=@total_likes%></label>
+                </div>
+
             </div>
             <hr>
             <h1 class="title">Songs</h1>
